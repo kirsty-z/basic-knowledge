@@ -1,1 +1,2 @@
-# basic-knowledge
+# 基础知识巩固
+1.es5-es6
