@@ -1,15 +1,17 @@
 //一、基本语法
-//  let:声明的变量只在代码块中有效
-//  var:变量提升,变量可以在声明之前使用
-//  const :声明一个只读的常量,常量的值不能改变
-//  javascript引擎的工作方式是，先解析代码，获得所有被声明的变量， 然后在一行一行运行
-//  变量提升：所有变量的申明语句，都会被提升到代码头部
+{
+  //  let:声明的变量只在代码块中有效
+  //  var:变量提升,变量可以在声明之前使用
+  //  const :声明一个只读的常量,常量的值不能改变
+  //  javascript引擎的工作方式是，先解析代码，获得所有被声明的变量， 然后在一行一行运行
+  //  变量提升：所有变量的申明语句，都会被提升到代码头部
 
-//  标识符：第一个字符：Unicode字母，美元（$）,下划线（_）,第二个还可以是数字
-
+  //  标识符：第一个字符：Unicode字母，美元（$）,下划线（_）,第二个还可以是数字
+}
 //二、数据类型：
-//  number string null boolean  underfined  object（function arrary）symbol
-//  判断数据类型
+{
+//  1.number string null boolean  underfined  object（function arrary）symbol
+//  2.判断数据类型
 //    typeof：返回一个值的数据类型  ex:{} []  返回object
 //    instanceof ：可以区分数组和对象
 //    Object.protorype.toString
@@ -29,10 +31,10 @@
       Number(null) //0  null可以转化为0
       Number(undefined) //NaN
 
-//  布尔值
+//  3.布尔值
 //     有六种自动转为false：“”或''  0 null undefined false  NaN
 
-//  数值
+//  4.数值
 //   数值精度：JavaScript浮点数64位二进制组成
 //      第一个：符号位，0表示正，1表示负数
 //      第二位到12位（11位）：指数部分
@@ -55,7 +57,7 @@
 //     parseInt（string，radix）radix：2-36之间的整数
        parseInt("11",4)//5   1*4**1+1*4**0
 //     isFinite()是否为一个正常值
-//   NaN:非数字，特殊数值  数据类型位number  不等于任何值，与任何值运算都得NaN
+//   5.NaN:非数字，特殊数值  数据类型位number  不等于任何值，与任何值运算都得NaN
 //     ex:
         NaN===NaN  //false
         typeof NaN  //number
@@ -64,7 +66,7 @@
         isNaN([])  //false
         isNaN([123])  //false
         isNaN(['123'])  //false
-//   Infinity:无穷
+//   6.Infinity:无穷
 //   isFinite  除以下都返回true
 //   ex:
       isFinite(Infinity)  //false
@@ -82,21 +84,21 @@
   //   Base64转码
   //     btoa()：任意值转为 Base64 编码
   //     atob()：Base64 编码转为原来的值
-  // 对象
+  // 7.对象
   //   表达式还是语句
   //   (表达式)
   //     eval() 对字符串求值
   //     ex:
           eval('{foo: 123}') // 123
           eval('({foo: 123  })') // {foo: 123}
-  // 函数
+  // 8.函数
   //   三种申明函数的方法
   //     function命令
         function print(){}
       // 函数表达式
-        var print=function(){}
+        var print1=function(){}
       // Funtion构造函数
-        var print=new Function('x','y','return x+y')
+        var print2=new Function('x','y','return x+y')
       //   等同于
           function print(x,y){
             return x+y;
@@ -112,17 +114,16 @@
       //   在函数内部读取多有参数
     // 闭包：函数中的函数，为了让临时变量不被释放
     //   ex:
-        function count(a){
+        function countf(a){
           return function(){
               return a++;
           }
         }
-        var count=count(0)
-        count()//0
-        count()//1  // 立即调用的函数表达式（IIFE）
-        //   ex：
-        count()//2
-        count()//3
+        var count=countf(0);
+        count();//0
+        count();//1  // 立即调用的函数表达式（IIFE）
+        count();//2
+        count();//3
 
         function Person(name){
           var age=12;
@@ -145,11 +146,11 @@
         person.getAge()   //25
   // 立即调用的函数表达式（IIFE）
   //   ex：
-        var f=function f(){}();
+        var f1=function f1(){}();
         (function(){}());
         (function(){})();
         (()=>{})();
-  // 数组:按次序排列的一组值
+  // 9.数组:按次序排列的一组值
   //     数组属于特殊的对象 typeof返回是object
         var arr1=["a","b","c"];
         Object.keys(arr1); //[1','2','3']
@@ -220,10 +221,11 @@
             //0:a
             //1:b
             //2:c
-
+}
 // 三、运算符
+{
 //     + - * / ++ -- +x -x  %  **(指数)
-    // 加法：
+    // 1.加法：
     //   加法运算符运行时，执行相加还是相连，导致不同的运算，叫重载
         '1'+2+3;//'123'
         1+2+'4';//'34'
@@ -250,14 +252,14 @@
           obj.valueOf=function (){return 1};
           obj.toString=function(){return 'hello'}
           obj+2;//'hello2'
-    // 余数：正负号由第一个运算子决定
+    //2. 余数：正负号由第一个运算子决定
         -3%2;//-1
         3%-2;//1
 
-    // 指数：右结合
+    // 3.指数：右结合
           2**3**2;//512
 
-    // 严格相等：===  和==
+    // 4.严格相等：===  和==
     //     两者区别在于==先转为同一个类型，再用严格模式比较， === 是否为同一个值
         1=='1';//true
         1==='1';//false 不是同一个类型直接返回false
@@ -272,7 +274,7 @@
         var b;
         a===b;//true 未赋值为undefined
 
-    // 相等运算
+    // 5.相等运算
     //     比较相同类型，与严格相等一样
     //     原始值比较：转为数字比较
           1=='1';//true   Number('1') 1
@@ -291,10 +293,10 @@
             [1]==true;//true
         // undefined和null只与自身比较或相互比较返回true 与其他比较都为false
 
-      // 布尔运算符
+      // 6.布尔运算符
       //   !  ||  &&  （非  或  与）
 
-      // 二进制运算符
+      // 7.二进制运算符
       //    对二进制位进行运算，位运算只对整数起作用，不是整数会自动转为整数
       //    位运算时，以32位带符号的整数进行运算，返回值也是32位带符号的整数
       //    |：或，
@@ -379,12 +381,14 @@
                 // 或
                 flags = ~flags
 
-      // void运算符:浏览器书签作用；超链接中插入代码，防止网页跳转
+      // 8.void运算符:浏览器书签作用；超链接中插入代码，防止网页跳转
           void 0;//undefined
           void(0);  //undefined
-      // 优先级
+      // 9.优先级
           // () :把表达式放到圆括号中，提升优先级；在函数后面，调用函数
+}
 // 四、语法专题
+{
 //     1.数据类型的转换
         // Number()：整体转换
         // parseInt()：逐个转换，都会自动过滤字符串签到后缀的空格
@@ -431,7 +435,7 @@
             Boolean(undefined);//false
             Boolean(NaN);//false
 
-    // 自动转化
+    // 2.自动转化
         +'abc';//NaN
         -'abc';//NaN
         -true;//-1
@@ -443,121 +447,376 @@
         null+1;//NaN  null undefined 转为数字时，为NaN
         undefined+1;//NaN
 
-    // Error实例对象
+    // 3.Error实例对象
+    //     message:错误提示信息
+    //     name:错误名称（非标准属性）
+    //     stack:错误堆栈（非标准属性）
+            var err=new Error("出错了");
+            // err.message();//出错了
+
+            function throwit(){
+              // throw new Error("出错了")
+            }
+            function catchit(){
+                try{
+                    throwit()
+                }catch(err){
+                    console.log(err.stack)
+                }
+            }
+            catchit()
+
+        // 原生错误类型
+        //     SyntaxError:语法错误
+        //       console.log "helle");
+        //     ReferenceError:引用不存在的变量；或将一个值赋值给无法赋值的变量
+        //       uasdfjsajh；
+        //       console.log()=1;
+        //     RangeError:超出范围
+        //       new Array(-1);//数组长度不能为负
+        //     TypeError：变量或者参数类型错误
+        //       new err;
+        //     URIError:URI相关函数参数不正确
+        //       encodeURI(),decodeURI(),encodeURIComponent(),decodeURIComponebt(),escape(),unescape()
+            // EvalError:函数未被正确执行
+
+        // 自定义错误
+            class UserError extends Error{
+              id;
+              constructor(id,msg){
+                super(msg);
+                this.id=id;
+                this.name="UserError"
+              }
+              a=()=>{
+                console.log(this.name);
+                console.log(this.message)
+              }
+            }
+            try{
+              throw new UserError(12,"出错了")
+            }catch(err){
+              if(err instanceof UserError){
+                  err.a();
+                  console.log(err.id+" user error")
+                }else{
+                  console.log('not user error')
+                }
+            }finally{
+              console.log("finally")
+            }
+
+        // throw:手动中断程序执行，抛出一个错误
+            // throw new Error("出错了");
+            // throw 42;
+            // throw {
+            //   toString:function(){
+            //     return "error"
+            //   }
+            // }
+        // try...catch:对错误进行处理，选择是否往下执行
+        // finally:不管是否出现错误，都会执行；当try...catch中出现return，都会执行
+            // openFile();
+            // try{
+            //  writeFile(data);
+            // }catch(err){
+            //   handleError(err);
+            // }
+            // finally{
+            //   closeFile("finally");
+            // }
+
+            var f2=function () {
+              try {
+                console.log(0);
+                throw 'bug';
+              } catch(e) {
+                console.log(1);
+                return true; // 这句原本会延迟到 finally 代码块结束再执行
+                console.log(2); // 不会运行
+              } finally {
+                console.log(3);
+                return false; // 这句会覆盖掉前面那句 return
+                console.log(4); // 不会运行
+              }
+
+              console.log(5); // 不会运行
+            }
+
+            f2();
+            //0
+            //1
+            //3
+            //false
+
+    // 4.编码风格：
+    //   缩进：使用tab
+    //   区块:大括号
+    //   圆括号：调用函数，定义函数，函数名与左括号没有空格；其他情况，语法元素与左括号见有间隔
+          function f(){};
+          f();
+          return (1*3);
+      // 行尾的分号：不要省略
+      // 全局变量：大写
+      // 变量申明：变量申明写在代码头部
+      // with:不要用
+      // ==和===：使用===
+      // 语句合并：不要将不同的语句合并
+      // 自增自减：使用+=  -=
+      // switch...case:对象结构代替
+          function doAction(action){
+            switch(action){
+              case "one":
+                return "one";
+              case "tow":
+                return "two";
+              default:
+                return "none";
+            }
+          }
+          doAction("one");
+
+          var action ="one"
+          var actionObj={
+            "one":function(){
+              return "one";
+            },
+            "two":function(){
+              return "tow";
+            }
+          }
+          if(typeof actionObj[action] !== "function"){
+            throw new Error("Invalid action");
+          }
+          return actionObj[action];
+
+    // 5.console对象与控制台
+    //     console：调试程序，显示网页代码运行时的错误信息；
+    //              提供命令行接口，与网页代码互动
+    //         静态方法
+                console.log();
+                console.info();
+                console.debug();
+                console.warn();
+                console.error();
+                console.table([
+                  { name: "JavaScript", fileExtension: ".js" },
+                  { name: "TypeScript", fileExtension: ".ts" },
+                  { name: "CoffeeScript", fileExtension: ".coffee" }
+                ]);
+                console.count("字符串参数作为表签");
+                console.dir(document.body);//对一个对象检查
+                console.dirxml(document.body);//以目录树的结构显示dom节点,不是dom节点，与dir一样
+                console.log(false,"判断条件不成立")
+                  try{
+                    if(false){
+                      throw new Error("判断条件不成立")
+                    }
+                  }catch(e){
+                    console.log(e)
+                  }
+                console.time();
+                console.timeEnd();//计时，算出一个操作所需花费的正确时间
+                console.group('一级分组');
+                console.log('一级分组的内容');
+                console.group('二级分组');
+                console.log('二级分组的内容');
+                console.groupEnd(); // 二级分组结束
+                console.groupEnd(); // 一级分组结束
+                console.trace();//当前执行的代码在堆栈中的调用路径
+                console.clear();//清除当前控制台的所有输出
+
+        // debugger:除错，打断点
+}
+// 五、标准库
+{
+    //1. Object对象
+        //本身的方法:定义在Object对象上单方法
+            Object.print=function(){}
+        // Object实例方法:定义在Object原型Object.prototype上的方法
+            Object.prototype.print=function(){console.log("hello world")}
+            var obj=new Object();
+            obj.print();//hello world
+
+        // Object():将任意值转为对象；参数为空（undefined或者null），返回一个空对象
+            var obj=new Object();
+            //等同于
+            var obj=new Object(undefined);
+            var obj=new Object(null);
+            obj instanceof Object;//true
+            // 原始类型：原始类型对应的包装对象
+                  var obj=new Object(1);//{1}
+                  var objBlo=new Object(true);//{true}
+                  obj instanceof Object;//true
+                  obj instanceof Number;//true
+                  objBlo instanceof Object;//true
+                  objBlo instanceof Boolean;//true
+            // 参数为一个对象，返回该对象，即不用转换
+                  var arr=[];
+                  var obj=new Object(arr);//[]
+                  arr===obj;//true
+                  // 判断一个变量
+                  function isObject(value){
+                    return value===Object(value);
+                  }
+                  isObject([]);//true
+                  isObject({});//true
+                  isObject(false);//false
+
+        // Object构造函数
+            var obj = new OBject();
+            var obj= {};//等价
+
+        // Object静态方法：自身的方法
+            var obj={p1:123,p2:345};
+            Object.keys(obj);//['p1','p2']  遍历对象的属性名
+            Object.getOwnPropertyNames(obj);//['p1','p2']//遍历对象自身的属性名
+            // 其他方法
+            // 对象属性模型
+            //     Object.getOwnPropertyDescriptor():获取某个属性的描述对象
+            //     Object.definedProperty():通过描述对象，定义某个属性
+            //     Object.definedProperties():通过描述对象，定义多个属性
+            // 控制对象状态的方法
+            //     Object.preventExtensions()：防止对象扩展。
+            //     Object.isExtensible()：判断对象是否可扩展。
+            //     Object.seal()：禁止对象配置。
+            //     Object.isSealed()：判断一个对象是否可配置。
+            //     Object.freeze()：冻结一个对象。
+            //     Object.isFrozen()：判断一个对象是否被冻结。
+            // 原型链相关方法
+            //     Object.create():指定原型对象的属性和属性，返回一个新的对象
+            //     Object.getPrototypeOf():获取对象的prototype对象
+
+        // Object实例方法：定义在Object.protorype对象的方法
+        //     Object.prototype.valueOf()：返回当前对象对应的值,默认对象本身
+                  var obj=new Object();
+                  obj.valueOf()===obj;//true
+                  1+obj;//"1[object Object]"
+                  obj.valueOf=function(){
+                    return 2;
+                  }
+                  1+obj;//3
+
+            // Object.prototype.toString()：返回当前对象对应的字符串形式
+                  var obj=new Object()
+                  obj.toString();//"[object Object]"
+
+                  var obj1={a:1};
+                  obj1.toString();//"[object Object]"
+
+                  obj.toString=function(){
+                    return "hello"
+                  }
+                  obj+" "+'world';//'hello world'
+
+                  // 数组、字符串、函数、Date 对象都分别部署了自定义的toString方法，覆盖了Object.prototype.toString方法
+                    ({a:1}).toString();//'[object Object]'
+                    [1,2,3].toString();//'1,2,3'
+                    "123".toString();//'123'
+                    (function (){return 123;}).toString();//'function (){return 123;}'
+                    (new Date()).toString();// "Tue May 10 2016 09:11:31 GMT+0800 (CST)"
+
+                  // 判断数据类型：Object.prototype.toString.call(value) 返回对象的类型字符串
+                    Object.prototype.toString.call(2) // "[object Number]"
+                    Object.prototype.toString.call('') // "[object String]"
+                    Object.prototype.toString.call(true) // "[object Boolean]"
+                    Object.prototype.toString.call(undefined) // "[object Undefined]"
+                    Object.prototype.toString.call(null) // "[object Null]"
+                    Object.prototype.toString.call(Math) // "[object Math]"
+                    Object.prototype.toString.call({}) // "[object Object]"
+                    Object.prototype.toString.call([]) // "[object Array]"
+
+                    function type(value){
+                      var str=Object.prototype.toString.call(value);
+                      return str.match(/\[object (.*?)\]/)[1].toLowerCase();
+                    }
+                    type([]);//"array"
+                    type({});//"object"
+                    type();//"undefined"
+                    type(/abc/);//"regex"
+                    type(new Date());//"date"
+
+            // Object.prototype.toLocaleString()：返回当前对象对应的本地字符串形式。
+                // 与toString()返回结果相同；不同对象实现自己版本，用来返回某些地区特定的值
+                var obj={};
+                obj.toString();//"[object Object]"
+                obj.toLocaleString();//"[object Object]"
+
+                var person={
+                  toString:function(){
+                    return "Henry Norman Bethune"
+                  },
+                  toLocaleString:function(){
+                    return "白求恩"
+                  }
+                }
+                person.toString();//'Henry Norman Bethune'
+                person.toLocaleString();//'白求恩'
+                // 三个对象定义了toLocaleString:
+                  Array.toLocaleString();
+                  Number.toLocaleString();
+                  Date.toLocaleString();
+
+            // Object.prototype.hasOwnProperty()：判断某个属性是否为当前对象自身的属性(true)，还是继承自原型对象的属性。
+                var obj={p:1};
+                obj.hasOwnProperty('p');  //true
+                obj.hasOwnProperty('toString');  //false
+
+            // Object.prototype.isPrototypeOf()：判断当前对象是否为另一个对象的原型。
+            // Object.prototype.propertyIsEnumerable()：判断某个属性是否可枚举。
+
+    // 2.属性描述对象
+        /*元属性：{
+          value:属性值，默认undefined，
+          writable:布尔值，是否可以改变，默认true，
+          enumerable:布尔值，是否可遍历，默认true，
+          configurable:布尔值，是否可配置，默认true，
+          get:取值函数，默认undefined,
+          set:存值函数，默认undefined
+        }*/
+
+        // Object.getOwnPropertyDescriptor(目标对象，字符串（对应目标对象的属性名）)
+        // 获取属性描述对象,只用于自身属性
+              var obj={p:1};
+              Object.getOwnPropertyDescriptor(obj,'p');
+              /*Object {
+                  value:1,
+                  writable:true,
+                  enumerable:true,
+                  configurable:true
+              }*/
+              Object.getOwnPropertyDescriptor(obj,'toString');
+              //undefined  toString继承属性，无法获取
+
+        // Object.getOwnPropertyNames():返回自身全部属性名,不管该属性是否可以遍历
+            var obj = Object.defineProperties({}, {
+              p1: { value: 1, enumerable: true },
+              p2: { value: 2, enumerable: false }
+            });
+            Object.getOwnPropertyNames(obj)
+            // ["p1", "p2"]
+
+            // Object.keys()与Object.getOwnPropertyNames()
+                Object.keys([]) // []
+                Object.getOwnPropertyNames([]) // [ 'length' ]
+
+                Object.keys(Object.prototype) // []
+                Object.getOwnPropertyNames(Object.prototype)
+                // ['hasOwnProperty',
+                //  'valueOf',
+                //  'constructor',
+                //  'toLocaleString',
+                //  'isPrototypeOf',
+                //  'propertyIsEnumerable',
+                //  'toString']
+
+
+}
 
 
 
 
 
-
-
-
-
-
-
-// Object:
-//   本身的方法和实例方法
-//   实例方法：定义在Object原型Object.protorype上的方法，可以被实例直接使用
-//   Object.keys()  Object.getOwnPropertyNames() 遍历对象的属性
-//   元属性{
-//     value:值
-//     writable：是否可改变
-//     enumerable：是否可以遍历
-//     configurable：是否可以修改描述对象
-//   }
-//   .denfineProperty()
-//   构造方法：new
-//   静态方法：类自身的方法: 类名.keys()
-//   实例方法：定义在Object.prototype（对象，类的实例）的方法，六个:a.valueOf()
-//   .preventExtensions：无法添加属性
-//   .seal：无法添加 删除
-//   .freeze无法添加 删除 修改
-//   漏洞：可以通过改变原型对象，来为对象增加属性。只能冻结属性指向的对象，而不能冻结对象本身的内容。
-// Array:
-//   实例方法：
-//     .slice（n位置起（包括），n2位置结束（不包括））重要应用：将类似数组的对象转为真正的数组
-//     .splice（start,count,添加的参数1,...,...）
-//     forEach 和map区别 forEach不返回值
-// String:
-//   .slice(start,end(不包括))end>start 返回空字符串
-//   .substring(start,end(不包括))end>start 调换位置  参数为负值，变为0
-//   .substr(start,count) count为负值，变为0
-//   .trim() 去除两端空格
-//   .match()是否匹配某个字符串，返回数组 不改变原数组
-//   .search()返回匹配第一个位置 否则-1
-//   .replace()替换（一般只替换第一个匹配，全部：/.../g）
-//   .split()分割字符串（没有参数，返回原字符串，第二个参数，返回数组最大成员）
-// Math：
-//   Math.ceil()：向上取整
-//   Math.floor()：向下取整
-//   Math.max()：最大值
-//   Math.min()：最小值
-//   Math.round()：四舍五入
-//   Math.random()：随机数
-// 对象：
-//   对象是单个事物的抽象
-//   对象是一个容器，封装了属性和方法
-//   new：创建一个空对象，作为将要返回的对象实例
-//       对象实例的原型，指向构造函数的prototype
-//       this指向对象实例
-// 原型：constructor：默认指向prototype对象所在的构造函数
-//     instanceof运算符只能用于对象，不适用原始类型的值。
-//     .__proto__返回对象的原型
-//     .constructor.prototype 返回对象的原型
-//     .getPrototypeOf():返回参数对象的原型 （推荐使用）
-//     .setPrototypeof（a，b）设置现有对象a的原型为b
-//     .create(A)以a为原型生成，继承了a对象的所有属性及方法
-//     isPrototypeOf()  检查某个对象是否是另一个对象的原型
-//     .getOwnPropertyNames() 返回对象本身所有属性的键名
-//     .hasOwnProperty（） 判断定义在自身的属性，还是定义在原形链上的属性
-//     .getOwnPropertyDescriptors()
-// 让一个构造函数继承另一个构造函数：
-//   1.super() 在实例中调用父类的构造函数super，让子类实例具有父类实例的属性
-//   2.让子类的原型指向父类的原型
-// 异步操作：
-//   单线程模型：多个线程，单个脚本只在一个主线程中运行
-//   同步任务是那些没有被引擎挂起、在主线程上排队执行的任务，前一个执行完，才执行后一个任务
-//   异步任务是那些被引擎放在一边，不进入主线程、而进入任务队列的任务
-//   事件循环：CPU遇到io操作，挂起等待中的任务，先运行后面排队的任务，等io操作返回结果，再回过头，把挂起的任务执行下去
-//   异步操作模式：
-//     回调函数 事件监听 发布/订阅（publish subscribe）
-// setTimerout:调整事件发生的顺序
-//             用户自定义回调的函数，通常在浏览器默认动作之前触发
-// Promise：是一个对象， 也是一个构造函数 三种状态（pending:异步操作未完成，fulfilled：异步操作成功 ， rejected:异步操作失败）
-//         .then（）接受两个回调函数。操作成功回调第一个函数，操作失败回调第二个函数
-// 事件：
-//   事件操作（监听和触发）EventTarget
-//     .addEventListener(事件，回调函数，true:捕获阶段可以监听到事件/false：冒泡阶段可以监听到事件)绑定事件监听
-//     .removeEventListener()移除事件监听
-//     .dispatchEvent()触发事件：当前节点上触发指定事件，从而触发监听函数的执行
-//   事件模型：.stopPropagation()分别在捕获阶段和冒泡阶段，阻止了事件的传播 不包括当前节点其他事件监听函数
-//           .stopImmediatePropagation()() 取消事件  不触发后面的所有事件
-//           .preventDefault（）取消浏览器对当前事件的默认行为 不会阻止事件的传播。canclelable为true时生效
-// Cookie:由HTTP协议生成， 提供HTTP协议使用：对话管理 个性化信息  追踪用户
-//   window.navigator.cookieEnabled为true   返回cookie
-//   服务器希望浏览器保存cookie，在HTTP头信息放置一个set-cookie   浏览器向服务器发送HTTP请求都会带上相应的cookie
-//   属性：Expires：指定一个具体的到期时间  Date.prototype.toUTCString()  进行格式转换
-//       Max-Age:从现在开始cookie存在的秒数
-//       Domain：制定cookie属于那个域名
-//       Path:发送HTTP请求，那个路径会附带cookie
-//       Secure：指定只有在https下才能附送cookie
-//       HttpOnly：cookie无法通过JavaScript脚本拿到
-//       SameSite：防止CSRF攻击和用户追踪：  前提用户浏览器支持sameSite
-//         strict：完全禁止第三方cookie
-//         Lax:导航到目标网址的get请求，连接 预加载 get表单
-//         None:前提必须设置secure属性；如：1970年1月1日零点
-//     删除一个cookie：设置expires属性为一个过去的日期
-// 同源：域名端口号协议相同
-//     限制：
-//       无法读取非同源的cookie
-//         Lax:导航到目标网址的get请求，连接 预加载 get表单
-//         None:前提必须设置secure属性；如：1970年1月1日零点
-//     删除一个cookie：设置expires属性为一个过去的日期
-// 同源：域名端口号协议相同
-//     限制：
-//       无法读取非同源的cookie VGCF Blv
-//       无法接触非同源的dom
-//       无法向非同源的地址发送ajax请求
 
 
 
