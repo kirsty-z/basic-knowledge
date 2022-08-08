@@ -810,8 +810,379 @@
                 //  'propertyIsEnumerable',
                 //  'toString']
 
+        // Object.defineProperty(object,propertyName,attributesObject)
+        // 通过属性描述对象，定义或修改一个属性，然后返回修改后的对象
+                // object:属性所在对象
+                // propertyName:属性名
+                // attributesObject：属性描述对象
+                var obj = Object.defineProperty({}, 'p', {
+                  value: 123,
+                  writable: false,
+                  enumerable: true,
+                  configurable: false
+                });
+                obj.p // 123
+                obj.p = 246;
+                obj.p // 123  writable为false,不可修改
+
+          // Object.defineProperties():一次定义或修改多个属性
+                  var objDefine=Object.defineProperties({},{
+                    p1:{value:123,enumerable:true},
+                    p2:{value:"345",enumerable:false},
+                    p3:{writeable:true,enumerable:true,fonfigurable:false,get:function(){
+                      return this.p1+this.p2;
+                    }},
+                    //设置了get（或者set）属性，则不能设置value，也不能将writable设置为true
+                  })
+                  objDefine.p1;//123
+                  objDefine.p2;//'345'
+                  objDefine.p3;//'123345'
+
+                  var obj = {};
+                  Object.defineProperty(obj, 'foo', {});
+                  Object.getOwnPropertyDescriptor(obj, 'foo')
+                  // {
+                  //   value: undefined,
+                  //   writable: false,
+                  //   enumerable: false,
+                  //   configurable: false
+                  // }  定义obj.foo用了一个空的属性描述对象，各个元属性默认值
+
+          // Object.pototype.propertyIsEnumerable():判断某个属性是否能遍历，判断自身属性，继承返回false
+                    var obj={};
+                    obj.p1=123;
+                    obj.propertyIsEnumerable('p1');//true
+                    obj.propertyIsEnumerable('toString');//false
+
+          // //元属性
+          //     value:目标属性的值
+          //     writable:目标属性的值是否可以改变
+                  var obj = {};
+                  Object.defineProperty(obj, 'a', {
+                    value: 37,
+                    writable: false
+                  });
+                  obj.a // 37
+                  obj.a = 25;
+                  obj.a // 37
+
+                  // 规避方法，通过覆盖属性描述对象，绕过这个限制;原型链会被完全忽略
+                    var obj=defineProperty({},'foo',{
+                      value:"a",
+                      writable:false
+                    })
+                    var obj1=Object.create(obj);
+                    Object.defineProperty(obj1,'foo',{value:"b"})
+                    obj1.foo;//'b'
+
+              // enumerable:是否可遍历
+              //       false:for...in  Object.keys(),JSON.stringify()  不能取到该属性
+                    var obj=Object.defineProperty({},"x",{value:11,enumerable:false})
+                    for (let key in obj){  //遍历包括继承属性
+                      console.log(key);
+                    }
+                    //undefined
+                    Object.keys(obj);//[]  不包括继承属性
+                    JSON.stringify(obj);//'{}'
+
+              // configurable：是否可以修改属性描述对象
+              //       为false:则writable,enumerable，configurable都不能修改
+              //       writable为false，改true报错；由true改为false允许
+                          var obj = Object.defineProperty({}, 'p', {
+                            writable: true,
+                            configurable: false
+                          });
+
+                          Object.defineProperty(obj, 'p', {writable: false});//修改成功
+              //       value：writable或者configurable为true时就能改
+                          var o1 = Object.defineProperty({}, 'p', {
+                            value: 1,
+                            writable: true,
+                            configurable: false
+                          });
+                          Object.defineProperty(o1, 'p', {value: 2})
+                          // 修改成功
+
+                          var o2 = Object.defineProperty({}, 'p', {
+                            value: 1,
+                            writable: false,
+                            configurable: true
+                          });
+                          Object.defineProperty(o2, 'p', {value: 2})
+                          // 修改成功
+
+                      // writable为false，修改value的值不会报错，值也不变;严格模式会报错
+                          var obj=Object.defineProperty({},'p',{
+                            value:1,
+                            writable:false,
+                            configurable:false
+                          })
+                          obj.p=334;
+                          obj.p;//1
+
+              // configurable决定目标属性是否可删除
+                          var obj=Object.defineProperties({},{
+                            p1:{
+                              value:1,
+                              configurable:false
+                            },
+                            p2:{
+                              value:345,
+                              configurable:true
+                            }
+                          })
+                          delete obj.p1;//false
+                          delete obj.p2;//true
+                          obj;//{p1:1}
+
+              // 存取器：get set
+                      var obj=Object.defineProperty({},'p',{})
+                      undefined
+                      var obj=Object.defineProperty({},'p',{
+                          get:function(){
+                              return "getter";
+                          },
+                          set:function (value){
+                              console.log("setter: "+value)
+                          }
+                      })
+                      obj.p;//'getter'
+                      obj.p=123;//'setter: 123'
+                      // 写法一 writable 和enumerable都是false
+
+                      // 写法二：writable 和enumerable都是true
+                      // get 不接受参数，set接受一个参数
+                        var obj={
+                          get p(){
+                            return "getter";
+                          },
+                          set p(value){
+                            console.log("setter: "+value)
+                          }
+                        }
+
+                      // 属性的值依赖对象内部数据
+                          var obj={
+                            $x:3,
+                            get next(){return this.$x++},
+                            set next(n){
+                                if(n>=this.$x){
+                                    this.$x=n;
+                                }else{
+                                    throw new Error("新的值必须大于当前值")
+                                }
+                            }
+                        }
+                        obj.next;//3
+                        obj.next=10;//10
+                        obj.next;//10
+                        obj.next=5;// Uncaught Error: 新的值必须大于当前值
+
+
+              // 对象拷贝
+                    // for...in:包括继承属性，如果遇到存取器定义的属性，只会拷贝值
+                    // 使用Object.defineProperty拷贝，使用HansOwnProperty过滤继承属性
+                    function extend(from,to){
+                      for(let property in from){
+                        if(!from.hasOwnProperty(property)){
+                            Object.defineProperty(
+                              to,
+                              property,
+                              Object.getOwnPropertyDescriptor(from,property)
+                              )
+                        }
+                      }
+                    }
+                    return to;
+
+              // 控制对象：冻结对象读写状态 preventExtensions,seal freeze(越来越强↓)
+                    // Object.preventExtensions():使一个对象无法添加新的属性
+                    // Object.isExtensible():检查是否使用了Object.preventExtensions()方法
+                        var obj={}
+                        Object.isExtensible(obj) // true
+                        Object.preventExtensions(obj)
+                        Object.isExtensible(obj) // false
+                        Object.defineProperty(obj,'p',{value:1})//TypeError
+                        obj.p1=123;
+                        obj.p;//undefined
+
+
+                    // Object.seal():无法添加新属性，也无法删除旧属性,并不影响修改属性值
+                    // Object.isSealed():检查是否使用了Object.seal()方法
+                    // 使用了Object.seal(),Object.isExtensible()为false
+                        var obj={
+                          p1:123,
+                          p2:345
+                        }
+                        Object.isSealed(obj);//false
+                        Object.seal(obj);
+                        Object.isSealed(obj);//true
+                        Object.isExtensible(obj);//false
+                        delete obj.p1;//false  无法删除
+                        obj.p3=12344;
+                        obj;//{p1:123,p2:345}  无法新增
+                        obj.p2=567;
+                        obj;//{p1:123,p2:567}  可以修改属性值
+
+                    // Object.freeze():无法添加新属性，无法删除旧属性，无法修改属性值；变成了常亮
+                    // Object.isFrozen():检查是否使用了Object.freeze()方法
+                    // 使用了Object.isExtensible()为false,Object.isSealed()true
+                          var obj={p1:123}
+                          Object.isFrozen(obj);//false
+                          Object.freeze(obj);
+                          Object.isFrozen(obj);//true
+                          Object.isSealed(obj);//true
+                          Object.isExtensible(obj);//false
+                          obj.p2=345;
+                          obj;//{p1:123}
+                          delete obj.p1;//false
+                          obj.p1=456;
+                          obj;//{p1:123}
+
+                        // 判断对象是否冻结，如果没有，可以对其赋值，不会报错
+
+                 // 局限性：以上三个锁定方法有一个漏洞，可以通过改变原型对象，来为对象新增属性
+                //  Object.getPrototypeOf()：获取对象的原型(prototype)对象
+                      var obj = new Object();
+                      Object.freeze(obj);
+                      var proto = Object.getPrototypeOf(obj);
+                      proto.t = 'hello';
+                      obj.t;// hello
+
+                      // 解决方法：冻结原型
+                          var proto = Object.getPrototypeOf(obj);
+                          Object.freeze(proto)
+
+                  //另一个局限性
+                      var obj={
+                          p1:1,
+                          p2:['a','b']
+                      }
+                      Object.freeze(obj)
+                      obj.p2.push("c");
+                      obj;//{p1:1,p2:['a','b','c']}
+                      // obj.p2属性指向一个数组，obj对象被冻结以后，这个指向无法改变，
+                      // 即无法指向其他值，但是所指向的数组是可以改变的
+
+    //3.Array对象
+        // 构造方法 new Array() 不同参数会导致不一样的行为
+            new Array(1);//[empty*1]
+            new Array(3);//[empty*3]
+            new Array(1.1);//RangeError
+            new Array(1,2,3);//[1,2,3]
+            new Array([1]);//[Array[1]] [[1]]
+            new Array('abc');//['acb']
+            new Array('a','b','c');//['acb']
+            // 直接使用数组字面量
+            var arr=[1,2]
+
+            // new 生成的空数组，键名为空；数组字面量键名有值
+            var a = new Array(3);
+            var b = [undefined, undefined, undefined];
+            a.length // 3
+            b.length // 3
+            a[0] // undefined
+            b[0] // undefined
+            0 in a // false
+            0 in b // true
+
+        //静态方发
+            // Array.isArray():是否为一个数组，弥补typeof运算符的不足
+            var arr=[1,2,3];
+            typeof arr;//'object'
+            Object.isArray(arr);//true
+
+        //实例方法
+            //valueOf():返回数组本身
+            //toString():返回数组的字符串形式
+                var arr=[1,2,3];
+                var arr1=[1,2,3,[4,5,6]];
+                arr.valueOf();//[1,2,3]
+                arr.toString();//'1,2,3'
+                arr1.toString();//'1,2,3,4,5,6'
+
+            // 后进先出：push，pop
+            // push():数组末端添加一个或多个元素，并返回新数组的长度；会改变原数组
+            // pop():push：删除数组最后一个元素，并返回该元素；会改变原数组
+                var arr=[];
+                arr.push(1);//1
+                arr.push('a',true,'c');//4
+                arr.pop();//'c'
+                [].pop();//undefined
+
+            // 先进先出：shift unshift
+            // shift():删除数组第一个元素，并返回该元素；会改变数组
+            // unshift(): 在数组第一个为添加新的元素，并返回新数组的长度；会改变原数组
+                  var arr=[1,2];
+                  arr.shift();//1
+                  arr.unshift(3);//2
+                  arr;//[2,2]
+                  arr.unshift(3,4);//4
+                  arr;//[3,4,2,2]
+
+            // join():指定参数分隔符，将所有数组成员连接成字符串返回；不提供，默认逗号隔开
+                // 成员是undefined或者null或者空位，会被转为空字符串
+                // 通过call的方法，也可以用于字符或类似数组的对象
+                    var arr=[1,2,3];
+                    arr.join();//'1,2,3'
+                    arr.join('#');//'1#2#3'
+                    [undefined,null,null].join();//',,'
+                    ['a',,'b'].join();//'a,,b'
+
+                    Array.prototype.join.call('hello','-');//'h-e-l-l-o'
+                    Array.prototype.join.call({0:'a',1:'b',length:2},'-');//'a-b'
+
+            // concat():多个数组合并；返回新的数组，原数组不变
+                [1,2,3].concat([4,5,6],[7,8]);//[1,2,3,4,5,6,7,8]
+                [2].concat({a:1});//[2,{a:1}]
+
+                // 浅拷贝：新数组拷贝的是对象的引用；原对象改变新数组也跟着改变
+                var obj={a:1}
+                var arr=[].concat(obj);[{a:1}]
+                obj.a=2;
+                arr[0];//{a:2}
+
+            // reverse():用于颠倒排列数组元素；返回新数组，改变原数组
+                  var arr=[1,2,3,4];
+                  arr.reverse();//[4,3,2,1]
+
+            // slice():提取目标数组的一部分，返回新数组；不改变原数组
+                  // slice(start，end):从0开始，如果end省略，默认到最后一个成员
+                  var arr=[1,2,3]
+                  arr.slice(1);//[2,3]
+                  arr.slice(0,1);//[1,2]
+                  arr.slice(-2,-1);//[2]
+                  // 注：第一个参数大于等于数组长度，或者第二个参数小于第一个参数，返回空数组
+                  arr.slice(3);//[]
+                  arr.slice(-2,-1);//[2]
+                  arr.slice(-2,-2);//[]
+                  arr.slice(-2,-3);//[]
+                  // 类数组转为真正的数组;
+                  Array.prototype.slice.call({0:'a',1:'b',length:2});//[1,2]
+
+            // splice():删除原数组的一部分成员，并可以在删除的位置添加新成员；返回删除的数组；会改变原数组
+                //splice(start,count,addElement1,assElement2,...)
+                var arr=['a','b','c','d','e','f'] ;//假设以下splice操作不改变arr
+                arr.splice(2,3);//['c','d','e']
+                arr.splice(1,3,'h','y');//['b','c','d']
+                arr;//['a'，'h','y','e','f']
+                arr.splice(-4,3);//['c','d','e']
+                arr.splice(2,0,'h');//['a','b','h','c','d','e','f']
+                // 注：添加的新元素在起始元素之前
+
+            // sort():对数组成员排序
+
+
+
+
+
+
+    //4.包装对象
+
+    //5.Boolean对象
 
 }
+
 
 
 
