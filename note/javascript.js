@@ -1170,20 +1170,254 @@
                 arr.splice(2,0,'h');//['a','b','h','c','d','e','f']
                 // 注：添加的新元素在起始元素之前
 
-            // sort():对数组成员排序
+            // sort():对数组成员排序,按字典顺序排序;会改变原数组
+                var arr=[3,4,1,2];
+                arr.sort();//[1,2,3,4]
+                // sort参数是一个函数
+                [2,3,1,4].sort((a,b)=>{
+                  return a-b;
+                });//[1,2,3,4]
+                // 两个数比较，返回值大于0，第一个数排在第二个后面
 
+            // map():将数组所有成员依次传入函数，把每次执行的结果组成一个新数组返回
+                var arr=['a','b','c']
+                arr.map((elem,index,arr)=>{
+                  console.log(elem);//0  1  2
+                  console.log(index);//'a'   'b'  'c'
+                });
+                arr.map(function (n){
+                  return n+"1";
+                });//['a1','b1','c1']
 
+                // 接受第二个参数，用来绑定回调内部的this变量
+                [1,2].map((e)=>{
+                  return this[e]
+                },arr);//['b','c']
 
+                // map()遇到undefined和null不会跳过，回跳过空位
+                    [1,undefined,null,,1].map(()=>{
+                      return "a"
+                    });//['a','a','a',,'a']
 
+            // forEach():与map()很相似，但是不返回值
+                function log(elem,index,arr){
+                  console.log("["+index+"]="+elem)
+                }
+                ['a','b'].forEach(log);
+                //[0]='a'
+                //[1]='b'
 
+                // 接受第二个参数，绑定参数函数的this变量
+                var out=[];
+                [1,2,3].forEach((elem)=>{
+                  return this.push(elem*elem)
+                },out)
+                out;//[1,4,9]  this指向out
+
+                // forEach做不到中断，中断使用for
+                var arr = [1, 2, 3];
+                for (var i = 0; i < arr.length; i++) {
+                  if (arr[i] === 2) break;
+                  console.log(arr[i]);
+                }
+
+                // forEach()遇到undefined和null不会跳过，回跳过空位
+                [1,undefined,null,,1].forEach(()=>{
+                  console.log("a")
+                });// 'a'  'a'  'a'  'a'
+
+            // filter():过滤数组成员，返回新数组；不会改变原函数
+                var arr=[1,2,3,4]
+                arr.filter(function(e){return e>3});//[4]
+                [1,'a',undefined,false].filter(Boolean);//[1,'a']
+                [1,2,3].filter((elem,index,arr)=>{
+                  return index%2===0;
+                });//[1,3]  返回偶数为成员
+
+                // 接受第二个参数，绑定参数函数内部this
+                var obj={MAX:3};
+                var myFilter=function(e){
+                  if(e>this.MAX)return true;
+                };
+                [1,2,3,4,5].filter(myFilter,obj);//[4,5]
+
+            // some(),every():判断成员是否符合条件，返回布尔值
+                // some()接受三个参数，当前成员，当前位置，整个数组
+                // some()只要有一个成员为true，整个some方法返回true
+                    var arr=[1,2,3,4,5];
+                    arr.some((elem,index,arr)=>{
+                        return elem>3
+                    });//true
+
+                // every():所有成员返回true，整个every才会返回true，否则false
+                    var arr=[1,2,3,4,5];
+                    arr.every((elem,index,arr)=>{
+                        return elem>3
+                    });//false
+
+                // 空数组，some返回false,every返回true，回调函数不会执行
+                // some(),every()接受第二个参数，用来绑定参数函数内部的this变量
+
+            // reduce(),reduceRight(): 依次处理数组的每一个成员，最终累计为一个值
+                // reduce()从左到右执行（从第一个到最后一个成员）
+                // reduceRight()从右到左执行（从第最后一个到第一个成员）
+                [1, 2, 3, 4, 5].reduce(function (a, b) {
+                  console.log(a, b);
+                  return a + b;
+                });//15
+                //1+2
+                // 3+3
+                // 6+4
+                // 10+5
+
+                // reduce()和reduceRight()两个参数，第一个函数接受四个参数
+                [1, 2, 3, 4, 5].reduce(function (
+                  a,   // 累积变量，必须
+                  b,   // 当前变量，必须
+                  i,   // 当前位置，可选
+                  arr  // 原数组，可选
+                ) {}
+
+                // 第二个参数：指定积累变量初始值；建议加上，可以防止空数组报错
+                [1, 2, 3, 4, 5].reduce(function (a, b) {
+                  return a + b;
+                }, 10));
+                // 25
+                // 找出字符串最长的数组成员
+                  var arr=["aaa",'aa','a'];
+                  arr.reduce((a,b)=>{
+                    return a.length>b.length?a:b;
+                  })
+
+            // indexOf(),lastIndexOf():返回元素在数组中第一次（最后一次）出现的位置，没找到返回-1
+                // indexOf()还接受第二个参数，表示搜索开始的位置
+                var arr=['a','b','c','d','a','c'];
+                arr.indexOf("b");//1
+                arr.indexOf("b",1);//-1
+                arr.lastIndexOf("a");//4
+                [NaN].indexOf(NaN);//-1
+                [NaN].lastIndexOf(NaN);//-1
+                // 两个方法使用严格相等（===）比较
+                // NaN是唯一一个不等于自身的值
+
+            // 链式使用
+                var users = [
+                  {name: 'tom', email: 'tom@example.com'},
+                  {name: 'peter', email: 'peter@example.com'}
+                ];
+                users
+                .map(function (user) {
+                  return user.email;
+                })
+                .filter(function (email) {
+                  return /^t/.test(email);
+                })
+                .forEach(function (email) {
+                  console.log(email);
+                });
+                // "tom@example.com"
 
     //4.包装对象
+        // 定义：三种原始类型（数字，字符串，布尔值）在一定条件下，转为对象：原始类型的包装对象
+        // 分别对应 Number String Boolean
+            var v1=new Number(123);
+            var v2=new String("abc");
+            var v2=new Boolean(true);
+            typeof v1;//'object';
+            v1===123;//false
+            // 带new时，将原始类型转为对象
+            // 不带new时，将任意类型的值转为原始类型的值
+
+        // 实例方法
+            // valueOf(),toString()
+                new Number(123).valueOf()  // 123
+                new String('abc').valueOf() // "abc"
+                new Boolean(true).valueOf() // true
+                new Number(123).toString() // "123"
+                new String('abc').toString() // "abc"
+                new Boolean(true).toString() // "true"
+
+        // 原始类型与实例对象的自动转换
+            'abc'.length;//3
+            // 'abc'不是对象，不能调用length属性；
+            // JavaScript引擎自动转换为包装对象，在对象上调用length属性，调用结束，临时对象销毁
+            // 自动转换生成的包装对象是只读的，无法修改。
+                var s = 'Hello World';
+                s.x = 123;
+                s.x // undefined
+            // 如果要为字符串类型添加属性，只能在原型对象String.prototype上定义
+
+        // 自定义方法
+            // 包装对象可以自定义属性和方法，供原始类型的值直接调用
+            String.prototype.doble=function(){
+                return this.valueOf()+this.valueOf()
+            }
+            'abc'.doble();//'abcabc'
+            Number.prototype.doble=function(){
+              return this.valueOf()+this.valueOf()
+            };
+            (123).doble();//246
 
     //5.Boolean对象
+        // 三个包装对象之一，作用：生成布尔值的包装对象实例
+            var b=new Boolean(true);
+            typeof b;//'object'
+            b.valueOf();//true
+            // false 包装的对象实例，运行结果为true
+            if(new Boolean(false)){
+              console.log("true")
+            };//"true"
+            if(new Boolean(false).valueOf()){
+              console.log("true")
+            };//无输出
+
+        // Boolean函数类型转换,除了一下都为true
+            Boolean("");//false
+            Boolean(undefined);//false
+            Boolean(null);//false
+            Boolean(NaN);//false
+            Boolean(0);//false
+            // 双重否（!）运算也可以将任意值转为布尔值
+            !!undefined // false
+            !!null // false
+            !!0 // false
+            !!'' // false
+            !!NaN // false
+
+    //6.Number对象
+        // 包装对象；构造函数；工具函数
+          var n=Number(1);
+          typeof n;//'object'
+          Number(true);//1
+
+        // 静态属性
+            Number.POSITIVE_INFINITY:正的无限，infinity
+            Number.NEGATIVE_INFINITY:负的无限，-infinity
+            Number.MAX_VALUE:最大的正数
+            Number.MIN_VALUE：最小的正数
+            Number.MAX_SAFE_INTEGER：最大的整数
+            Number.MIN_SAFE_INTEGER：最小的整数
+            Number.NaN：非数值，指向NaN
+
+        // 实例方法
+            // Number.prototype.toString():将数值转为字符串
+                // toString()接受一个参数，表示输出的进制
+                // toString()只能将十进制转数转为其他进制的字符串
+                    (10).toString();//'10'
+                    (10).toString(2);//'1010'
+                    (10).toString(8);//'12'
+
+            // Number.prototype.toFixed():将一个数转为指定位数的小数，然后返回该小数的字符串
+
+
+    //7.String对象
+
+    //8.Math对象
+    //9.Date对象
+    //10.Regex对象
+    //11.Json对象
 
 }
-
-
 
 
 
