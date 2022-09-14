@@ -89,8 +89,8 @@
   //   (表达式)
   //     eval() 对字符串求值
   //     ex:
-          eval('{foo: 123}') // 123
-          eval('({foo: 123  })') // {foo: 123}
+          // eval('{foo: 123}') // 123
+          // eval('({foo: 123  })') // {foo: 123}
   // 8.函数
   //   三种申明函数的方法
   //     function命令
@@ -1138,7 +1138,7 @@
 
                 // 浅拷贝：新数组拷贝的是对象的引用；原对象改变新数组也跟着改变
                 var obj={a:1}
-                var arr=[].concat(obj);[{a:1}]
+                var arr=[].concat(obj);//[{a:1}]
                 obj.a=2;
                 arr[0];//{a:2}
 
@@ -2398,29 +2398,29 @@
             }
             person.describe;//"姓名：张三"
         // 对象可以赋值给另一个对象，所以属性所在的当前属性是可变的，this指向是可变的
-            var A={
+            var Aa={
               name:"张三",
               describe:function(){
                 return "姓名："+this.name;
               }
             };
             var B={name:"李四"};
-            B.describe=A.describe;
+            B.describe=Aa.describe;
             B.describe();//"姓名：李四"
         // this动态指向
             function f() {
               return '姓名：'+ this.name;
             }
-            var A = {
+            var A1 = {
               name: '张三',
               describe: f
             };
-            var B = {
+            var B1 = {
               name: '李四',
               describe: f
             };
-            A.describe() // "姓名：张三"
-            B.describe() // "姓名：李四"
+            A1.describe() // "姓名：张三"
+            B1.describe() // "姓名：李四"
 
     // 实质
         // 设计目的：在函数体内部，指代函数当前运行的环境
@@ -3045,9 +3045,9 @@
 
   // 4.Object对象的相关方法
       //Object.getPtototypeOf():返回参数对象原型
-          var F = function () {};
-          var f = new F();
-          Object.getPrototypeOf(f) === F.prototype; // true
+          var F1 = function () {};
+          var ff = new F1();
+          Object.getPrototypeOf(ff) === F1.prototype; // true
           // 特殊对象原型
               // 空对象的原型是 Object.prototype
               Object.getPrototypeOf({}) === Object.prototype // true
@@ -3068,25 +3068,25 @@
             function F(){
               this.foo="foo";
             }
-            var f=new F();
+            var f1=new F();
             // 等同
-            var f=Object.setPrototypeOf({},F.prototype);
-            F.call(f);//将构造函数的this绑定这个空对象，然后执行构造函数，
+            var f1=Object.setPrototypeOf({},F.prototype);
+            F.call(f1);//将构造函数的this绑定这个空对象，然后执行构造函数，
             // 使定义在this的方法和属性（this.foo），都转移到这个空对象上
 
         // Object.create():生成实例对象的方法，使用new命令返回一个实例
             // 该方法接受一个对象作为参数，以它为原型，返回一个实例对象，该实例继承原型对象的属性
                 // 原型对象
-                var A = {
+                var A2 = {
                   print: function () {
                     console.log('hello');
                   }
                 };
                 // 实例对象
-                var B = Object.create(A);
-                Object.getPrototypeOf(B) === A // true
-                B.print() // hello
-                B.print === A.print; // true
+                var B2 = Object.create(A2);
+                Object.getPrototypeOf(B2) === A2 // true
+                B2.print() // hello
+                B2.print === A2.print; // true
             // Object.create()可用下列代替
                 if(typeof Object.create !== "function"){
                   Object.create=function(obj){
@@ -3096,13 +3096,13 @@
                   }
                 }
             // 一下三种生成对象等价
-                var f=Object.create({});
-                var f=Object.create(Object.prototype);
-                var f=new Object();
+                var fn=Object.create({});
+                var fn=Object.create(Object.prototype);
+                var fn=new Object();
             // 如果生成一个不具有任何属性的对象（比如toString（）和valueOf（））
             // 将Object.create()参数改为null
-                var f=Object.create(null);
-                f.valueOf();//TypeError:no method 'valueOf'
+                var f1=Object.create(null);
+                f1.valueOf();//TypeError:no method 'valueOf'
             // 使用Object.create()参数不能为空，参数一定为对象，否则报错
                 Object.create();// TypeError
                 Object.create(123);// TypeError
@@ -3151,18 +3151,711 @@
             Object.prototype.isPrototypeOf(Object.create(null));//false
 
         //Object.prototype.__proto__:返回该对象原型，该属性可读写
+            var obj={};
+            var p={};
+            obj.__proto__=p;
+            Object.getPrototypeOf(obj)===p;//true
+            // 内部属性，不应该对使用者暴露。
+            // 使用Object.getPrototypeOf() 和Object.setPrototypeOf()，进行原型对象的读写操作
+            var A3={name:"张三"};
+            var B3={name:"李四"};
+            var proto={
+              print:function(){
+                console.log(this.name);
+              }
+            };
+            A3.__proto__=proto;
+            B3.__proto__=proto;
+            A3.print();//"张三"
+            B3.print();//"李四"
+            A3.print===B3.print;//true
+            A3.print===proto.print;//true
+            B3.print===proto.print;//true
 
+        // 获取原型对象方法的比较
+            // __proto__属性指向当前对象原型对象，及构造函数(Object或Object.constructor)的prototype属性
+                var obj=new Object();
+                obj.__proto__===Object.prototype;//true
+                obj.__proto__===Object.constructor.prototype;//true
+            // 获取实例原型对象obj的源性对象，有三种方法
+                obj.__proto__;
+                obj.constructor.prototype;
+                OBject.getPrototypeOf(obj);
+                // 前两种不可靠，第一个浏览器才需要部署，其他环境不可部署
+                // 第二个在手动改变原型时，可能会失效
+                var P1=function(){};
+                var p=new P1();
+                var C=function(){};
+                C.prototype=p;
+                var c=new C();
+                c.constructor.prototype ===p;//false
+                // C原型对象改为了p，实例对象c.constructor.prototype没有指向p
+                C.prototype=p;
+                C.prototype.constroctor=p;
+                var c=new C();
+                c.constructor.prototype===p;//true
 
+        // Object.getOwnPropertyNames():返回一个数组，成员是参数对象本身属性的键名，不包含继承属性键名
+            Object.getOwnPropertyNames(Date);//返回Date所有自身属性名
+            // ["parse","arguments","UTC","caller",...]
+            // 返回所有键名，不管是否可以遍历
+            // 获取可以遍历的属性，使用Object.keys()方法
+              Object.keys(Date);//[]
+              // Date所有自身属性，都是不可遍历的
 
+        // Object.prototype.hasOwnProperty():返回一个布尔值，用于判断某个属性定义在对象自身，还是定义在原型链上
+            Date.hasOwnProperty("length");//true
+            Date.hasOwnProperty("toString");//false
 
+        // in运算符和for...in运算符
+            // in返回一个布尔值，表示一个对象是否具有某个属性；不区分是否自身还是继承属性
+                'length' in 'Date';//true
+                'toString' in 'Date';//true
+                // 检查是否存在这个属性
+            // 获取对象的所有可遍历属性（不管自身还是继承），可以使用for...in循环
+                var o1={p1:123};
+                var o2=Object.create(o1,{p2:{
+                  value:234,
+                  enumerable:true
+                }});
+                for(let o in o2){
+                  console.log(o);
+                }
+                //p1
+                //p2
+            // for...in循环中判断是否是自身属性，用hasOwnProperty判断
+                for(let o in o2){
+                  if(o2.hasOwnProperty(o)){
+                    console.log(o)
+                  }
+                }
+                // p2
 
-
+        // 对象拷贝
+            // 确定拷贝后的对象，与原对象具有同样的原型
+            // 确定拷贝后的对象，与原对象具有同样的实例属性
+            function copyObject(orig){
+              var copy=Object.create(Object.getPrototyeOf(orig));
+              copyOwnPropertiesFrom(copy,orig);
+              return copy;
+            }
+            function copyOwnPropertiesFrom(target,orig){
+              Object.getOwnPropertyNames(orig).forEach((propKey)=>{
+                var desc = Object.getOwnPropertyDescriptor(orig,propKey);
+                Object.defineProperty(target,propKey,desc)
+              })
+              return target
+            }
+            // 更简单的方法拷贝一个对象
+            function copyObject(orig) {
+              return Object.create(
+                Object.getPrototypeOf(orig),
+                Object.getOwnPropertyDescriptors(orig)
+              );
+            }
 
   // 5.严格模式
+      // 体现JavaScript更合理 更安全 更严谨的发展方向
+      // 启用方法
+          'use strict';
+          // 整个脚本文件：user strict 放在文件第一行，整个脚本按严格模式运行
+          // 单个函数
+            function f(){
+              'use strict';
+              return "这是严格模式";
+            }
+      // 显示报错
+          // 只读属性不可写
+              'use strict';
+              'abc'.length=5;
+              // TypeError:Cannot assign to read only property 'length' of string 'abc'
+              // 正常模式，改变无效不会报错
+              // 严格模式，对只读属性赋值，删除不可配置属性都会报错
+          // 只设置了取值器的属性不可写
+              // 严格模式下对只有取值器，没有存值器的属性赋值，会报错
+                  var obj={
+                    get v(){return 3}
+                  }
+                  obj.v;//3
+                  obj.v=2;//TypeError:Cannot set property v
+          // 禁止扩展的对象不可扩展
+              'use strict';
+              var obj={};
+              obj.preventExtensions();
+              obj.p=1;//TypeError: Cannot add property v
+          // eval,arguments不可用作标识符
+              'use strict';
+              var eval=1;
+              // var arguments=12;
+              function arguments(){}
+              //...
+          //函数不能有重名的参数
+              function f(a,a,b){
+                return a+b;
+              }
+          // 禁止八进制的前缀0表示法
+              // 正常模式下，整数第一位如果是0，表示8进制
+              // 严格模式，整数第一位不能为0
+              var n=0100;
+
+      // 增强的安全措施
+          // 全局变量显式申明
+              'use strict';
+              v=1;//报错，v未声明
+              for(i;i<2;i++){}//报错，i未声明
+              function f(){x+=1;}
+              f();//报错，未声明就创建一个全局变量
+          // 禁止关键字this指向全局对象
+              // 正常模式下，this可能会指向全局对象，严格模式禁止这种用法，避免无意间创造全局变量
+                  function f(){
+                    'use strict';
+                    console.log(this === undefined);
+                  }
+                  f();//true
+                  // 严格模式的函数体内部this表示undefined
+              // 使用构造函数，忘记加new，this不再指向全局对象，而是报错
+                  function F(){
+                    this.a=1;
+                  }
+                  F();//报错，this未定义
+              // 严格模式下，构造函数直接调用，函数内部this表示undefined，因此使用call apply bind
+              // 将任意值绑定到this上
+                  function fun(){
+                    return this;
+                  }
+                  fun();//wondow
+                  fun.call(2);//Number {2}
+                  fun.call(true);//Boolean {true}
+                  fun.call(null);//window
+                  fun.call(undefined);//window
+                  // 正常模式，this指向全局，如果绑定的值为非对象，将自动转为对象再绑定上去
+                  // null和undefined无法转为对象，将忽略
+
+                  function fun(){
+                    'use strict';
+                    return this;
+                  }
+                  fun();//undefined
+                  fun.call(2);//2
+                  fun.call(true);//true
+                  fun.call(unll);//null
+                  fun.call(undefined);//underfined
+                  // 严格模式，可以把任意值绑定到this上
+
+          //禁止使用fn.callee,fn.caller
+              // 函数内部不得使用fn.caller、fn.arguments，否则会报错。这意味着不能在函数内部得到调用栈了
+              function f(){
+                'use strict';
+                f.caller;//报错
+                f.arguments;//报错
+              }
+
+          // 禁止使用arguments.callee arguments.caller
+              // 历史遗留变量，已经取消
+              'use strict';
+              var f2 = function () {
+                return arguments.callee;
+              };
+              f2(); // 报错
+
+          // 禁止删除变量
+              // 严格模式下不能删除变量，如果使用delete删除变量，报错
+              // 只有删除对象的属性，且属性的描述对象configurable为true时，才能被delete删除
+              'use strict';
+              var obj=Object.create(null,{
+                p1:{
+                  value:1,
+                  configurable:true
+                },
+                p2:{
+                  value:2,
+                  configurable:false
+                }
+              })
+              delete obj;//语法错误
+              delete obj.p1;//true
+              delete obj.p2;//语法错误
+
+      //静态绑定
+          // 禁止使用with语句
+                // 严格模式，使用with语句报错，因为with语句无法在编译时确定，某个属性到底归属那个对象
+                'use strict';
+                var v=1;
+                var obj={};
+                with(obj){
+                  v=2;
+                }
+                // SyntaxError
+
+          // 创设eval作用域
+              // 正常模式，两种变量作用域：全局作用域和函数作用域
+              // 严格模式创设第三个作用域：eval作用域
+              // eval作用域不能运行其他作用域的变量，eval所生成的变量只能用于eval内部
+
+          // arguments不再追踪参数的变化
+              // 变量arguments代表函数参数；严格模式内部改变参数与arguments的联系被切断了
+              function f(a){
+                a=2;
+                return [a,arguments[0]];
+              }
+              f(1);//[2,2]
+              function f(a){
+                'use strict';
+                return [a,arguments[0]];
+              }
+              f(1);//[2,1]
+
+      //向下一个版本JavaScript过度
+          // 非函数代码不得声明函数
+              // 不允许在非函数的代码块內声明函数
+              'use strict';
+              if(true){
+                function f1(){}//语法错误
+              }
+              for (var i = 0; i < 5; i++) {
+                function f2() { } // 语法错误
+              }
+
+          // 保留字
+              // implements、interface、let、package、private、protected、public、static、yield等
 
 }
 // 七、异步操作
-{}
+{
+  // 概述
+      // 单线程模型
+          // JavaScript只在一个线程上运行；JavaScript多个线程，单个脚本只在一个线程上运行（主线程），其他线程在后台配合
+          // 内部循环机制：CPU不管io操作，挂起来处于等待中的任务，先运行排在后面的任务，等到io操作返回结果，再回过头，把挂起的任务继续执行下去
+
+      // 同步任务和异步任务
+          // 同步任务：那些没有被引擎挂起，在主线程排队执行的任务。只有前一个任务执行完毕才能执行下一个任务
+          // 异步任务：那些被引擎放在一边，不进入主线程，进入任务队列的任务；
+          // 只有引擎认为这个任务可以执行（如ajax操作从服务器获得结果），该任务（采用回调函数的形式）才能进入主线程执行
+
+      // 任务队列和事件循环
+          //异步队列：除了主线程，还有一个任务队列，里面是各种需要当前程序处理的异步任务；
+          // 事件循环：引擎在不停的检查，一遍又一遍，只要同步任务执行完毕，引擎就会检查那些被挂起来的异步任务，是不是可以进入主线程
+
+      // 异步操作的模式
+          // 回调函数
+              function f1(callback){
+                callback();
+              }
+              function f2(){}
+              f1(f2);
+              // 优点：简单，容易理解和实现
+              // 缺点：不利于代码的阅读和维护，各个部分高度耦合，使程序混乱，流程难以追踪，每个任务只能指定一个回调函数
+          // 事件监听
+              // 事件驱动模式，异步任务执行不取决于代码顺序，取决于某件事的发生
+                  f1.on("done",f2);// jquery写法
+                  // f1发生done事件，就执行f2
+                  function f1(){
+                    setTimeout(function(){
+                      // ...
+                      f1.trigger("done");//表示执行完毕，立即触发done，从而执行f2
+                    },1000)
+                  }
+                  // 优点：容易理解，可以绑定多个事件，每个事件可以指定多个回调函数。可以去耦合；有利于模块化实现
+                  // 缺点：程序编程事件驱动型，运行流程会变得很不清晰，阅读时，很难看出主流程
+
+          // 发布/订阅
+              // 如果存在一个信号中心，某个任务执行完毕，信号中心发布（publish）一个信号
+              // 其他任务向任务中心订阅（subscribe）这个信号，从而知道自己从什么时候开始执行---发布订阅模式（观察者模式）
+                  // 首先，f2向信号中心jQuery订阅done信号
+                  jQuery.subscribe("done",f2);
+                  // f1进行改写
+                  function f1() {
+                    setTimeout(function () {
+                      // ...
+                      jQuery.publish('done');
+                    }, 1000);
+                  }
+                  // f1执行完毕，向信号中心发射done信号，从而引发f2执行
+                  // f2执行完毕，取消订阅
+                  jQuery.unsubscribe("done",f2);
+
+      // 异步操作的流程控制
+          function async(args,callback){
+            console.log("参数为："+args+", 1秒后返回结果");
+            setTimeout(function(){callback(args*2)},1000);
+          }
+          function final(value){
+            console.log("完成: "+value)
+          }
+          async(1,function(value){
+            async(2,function(value){
+              async(3,function (value){
+                async(4,function(value){
+                  async(5,function(value){
+                    async(6,final)
+                  })
+                })
+              })
+            })
+          })
+          // 参数为 1 , 1秒后返回结果
+          // 参数为 2 , 1秒后返回结果
+          // 参数为 3 , 1秒后返回结果
+          // 参数为 4 , 1秒后返回结果
+          // 参数为 5 , 1秒后返回结果
+          // 参数为 6 , 1秒后返回结果
+          // 完成:  12
+          // 回调函数嵌套，写起来麻烦，容易出错，难以维护
+
+      // 串行执行
+          // 流程函数控制异步任务，一个任务结束，在执行另一个
+          var items=[1,2,3,4,5,6];
+          var results=[];
+          function async(value,callback){
+            console.log("参数为："+value+" , 1秒返回结果");
+            setTimeout(function(){callback(value*2)},1000)
+          }
+          function final(value){
+            console.log("完成： "+value);
+          }
+          function series(item){
+            if(item){
+              async(item,function(result){
+                results.push(result);
+                return series(items.shift());
+              })
+            }else{
+              return final(results);
+            }
+          }
+          series(items.shift());
+          // 参数为 1 , 1秒后返回结果
+          // 参数为 2 , 1秒后返回结果
+          // 参数为 3 , 1秒后返回结果
+          // 参数为 4 , 1秒后返回结果
+          // 参数为 5 , 1秒后返回结果
+          // 参数为 6 , 1秒后返回结果
+          // 完成:  [2,4,6,8,10,12]
+          items;//[]
+          results;//[2,4,6,8,10,12]
+
+      // 并行执行
+          // 流程函数控制，所有异步任务同时执行，等全部完成以后，才执行final函数
+          var items=[1,2,3,4,5,6];
+          var results=[];
+          function async(args,callback){
+            console.log("参数为： "+args+" , 1秒返回结果");
+            setTimeout(function(){callback(args*2)},1000)
+          }
+          function final(value){
+            console.log("完成： "+value);
+          }
+          items.forEach(function(item){
+            async(item,function(result){
+              results.push(result);
+              if(items.length===results.length){
+                return final(results)
+              }
+            });
+          })
+
+      // 并行与串行结合
+          // 设置门槛，每次最多执行n个异步任务
+          var items=[1,2,3,4,5,6];
+          var results=[];
+          var running=0;
+          var limit=2;
+          function async(args,callback){
+            console.log("参数为： "+args+" , 1秒返回结果");
+            setTimeout(function(){callback(args*2)},1000)
+          }
+          function final(value){
+            console.log("完成： "+value);
+          }
+          function launcher(){
+            while(running<limit && items.length>0){
+                var item=items.shift();
+                async(item,function(result){
+                  results.push(result);
+                  running--;
+                  if(items.length>0){
+                    launcher();
+                  }else if(running==0){
+                    final(results);
+                  }
+                })
+                running++;
+            }
+          }
+          launcher();
+
+  // 定时器
+      // setTimeout():执行某个函数或代码片段，在多少毫秒后执行；返回一个整数，定时器编码，以后可以用来取消定时器
+          var timerId = setTimeout(func|code,delay);
+          // 代码片段以字符串形式
+              console.log("1");
+              setTimeout('console.log(2)',1000);
+              console.log("3");
+              //1
+              //3
+              //2
+          // 第二个参数省略，默认为0
+          // 允许更多参数，他们将一次传入推迟执行的函数（回调函数）
+              setTimeout(function(a,b){
+                return a+b;
+              },1000,1,1);//2
+          // 回调函数是对象的方法，那么setTimeout使得方法内部的this关键字指向全局环境，不是定义时所在的对象
+              var x=1;
+              var obj={
+                x:2,
+                y:function(){
+                  console.log(this.x);
+                }
+              }
+              setTimeout(obj.y,1000);//1
+              // 防止上述问题，一个解决方法，将obj.y放入一个函数
+                  setTimeout(function(){
+                    obj.y()
+                  },1000);//2
+              // 第二种方法，使用bind方法，将obj.y方法绑定到obj上
+                  setTimeout(obj.y.bind(obj),1000);//2
+
+      // setInterval():指定某个人物每隔一段时间执行一次，无限次的定时执行，直到窗口关闭；
+          // 与setTimeout用法一致
+              var timer = setInterval(function(){
+                console.log("1");
+              },1000)
+          // 接受多个参数，他们会传入回调函数
+          // 实现轮询，轮询URL的hash值是否发生变化的例子
+              var hash = window.location.hash;
+              var hashWatcher = setInterval(function() {
+                if (window.location.hash != hash) {
+                  updatePage();
+                }
+              }, 1000);
+
+      // clearTimeout(),clearInterval()
+          // setTimeout和setInterval返回一个整数，定时器编号；
+          // 将整数传入clearTimeout和clearInterval函数，就能取消对应的定时器
+              function f(){}
+              var id1=setTimeout(f,1000);
+              var id2=setInterval(f,1000);
+              clearTimeout(id1);
+              clearINterval(id2);
+          // setTimeout和setInterval返回的整数是连续的，后一个比前一个整数值大1
+              function f(){}
+              setTimeout(f,1000);//10
+              setTimeout(f,1000);//11
+              setTimeout(f,1000);//12
+          // 取消当前所有setTimeout的定时器
+          /*
+          (function (){
+                var vId=setInterval(clearAllTimeouts,0)
+                function clearAllTimeouts(){
+                  var id=setTimeout(function(){},0)
+                  while(id>0){
+                    if(vId !==id){
+                      clearTimeout(id);
+                    }
+                    id--;
+                  }
+                }
+              })()
+              */
+
+      // debounce函数：防抖动 防止回调函数被频繁调用
+          // 连续keydown事件，造成大量ajax通信；设置一个门槛值，表示两次ajax通信最小间隔时间
+          // $("texarea").on("heydown",debounce(ajaxAction,2500));//jQuery
+          function debounce(fn, delay){
+            var timer = null; // 声明计时器
+            return function() {
+              var context = this;
+              var args = arguments;
+              clearTimeout(timer);
+              timer = setTimeout(function () {
+                fn.apply(context, args);
+              }, delay);
+            };
+          }
+          // 在2500s內用户再次点击，就会取消上一次定时器，然后在创建一个定时器；
+          // 保证回调函数之间调用间隔至少2500s
+
+      // 运行机制
+          // setTimeout和setInterval的运行机制，是将指定的代码移除本轮事件循环，等到下一轮事件循环，在检查是否到了指定时间
+          // setTimeout和setInterval的回调函数，必须等到本轮事件循环所有同步任务结束后才会开始执行
+          // 不能保证，setTimeout和setInterval指定的任务一定会按照预定时间执行
+              setInterval(function(){
+                console.log("2")
+              },1000)
+              sleep(3000);
+              function sleep(ms){
+                var start=Date.now();
+                while((Date.now()-start)<ms){}
+              }
+              // sleep需要3s才能执行完成，setInterval要延迟3s才开始生效
+              // setInterval不会产生积累效应，即不会一下输出3个2，只会一会输出一个2
+
+      // setTimeout(f,o)
+          // setTimeout的作用：将代码延迟到指定时间执行
+          setTimeout(function(){
+            console.log("1")
+          },0)
+          console.log("2");
+          // 2
+          // 1
+          // 将指定代码移除本轮事件循环，当前脚本的同步任务执行完毕，才会执行回调函数f
+          // 也就是说setTimeout(f,o)会在下一轮事件循环开始执行
+
+      // 应用
+          // setTimeout(f,o)用途
+          // 1、调整事件发生的顺序
+              // HTML 代码如下
+              // <input type="button" id="myButton" value="click">
+              var input = document.getElementById('myButton');
+              input.onclick = function A() {
+                setTimeout(function B() {
+                  input.value +=' input';
+                }, 0)
+              };
+              document.body.onclick = function C() {
+                input.value += ' body'
+              };
+              // 点击事件，先执行A,在执行C，在执行B
+          // 2、用户自定义回调函数，通常在浏览器默认动作之前触发
+              // keypress事件会在浏览器接收文本之前触发
+              // HTML 代码如下
+              // <input type="text" id="input-box">
+              document.getElementById('input-box').onkeypress = function (event) {
+                this.value = this.value.toUpperCase();
+              }
+              // 要求，每次输入文本，立即转为大写；
+              // 实际，只能把输入前的字符转为大写，浏览器还没有接收到新的文本
+              document.getElementById('input-box').onkeypress = function() {
+                var self = this;
+                setTimeout(function() {
+                  self.value = self.value.toUpperCase();
+                }, 0);
+              }
+              // 使得它在浏览器接收到文本之后触发
+
+  // Promise对象
+      // 概述
+          //是JavaScript的异步操作解决方案；为异步操作提供统一接口
+          // 起到代理作用，充当异步操作与回调函数的中介，使异步操作具备同步操作的接口
+          // 首先，Promise是一个对象，也是一个构造函数
+              function f1(resolve,reject){
+                // 异步代码
+              }
+              var p1=new Promise(f1);
+              // Promise接受一个回调函数f1作为参数，f1里面是异步代码
+              // p1是Promise实例
+          // Promise设计思想，所有异步任务都返回一个promise实例；
+          // Promise实例有一个then方法，用来指定下一步的回调函数
+              var p1=new Promise(f1);
+              p1.then(f2);
+      // Promise对象的状态
+          // 异步操作未完成 （pending）
+          // 异步操作成功（fulfilled）
+          // 异步操作失败（rejected）
+              // fulfilled和rejected合在一起称为resolved（已定型）
+          // 变化途径
+              // 从未完成到成功
+              // 从未完成到失败
+          // 结果
+              // 异步操作成功，Promise实例传回一个值，状态变为fulfilled
+              // 异步操作失败，Promise实例抛出一个错误，状态变为rejected
+      // Promise构造函数
+          var promise = new Promise(function(resolve,reject){
+            if(/*异步操作成功*/true){
+              resolve(value);
+            }else{
+              /*异步操作失败*/
+              reject(new Error());
+            }
+          })
+      // Promise.prototype.then():用来添加回调函数
+          // then可以接受两个回调函数，第一个是异步操作成功时（状态变为fulfilled）的回调函数
+          // 第二个是异步操作失败时（状态变为rejected）的回调函数；一旦状态改变，就调用相应的回调函数
+              var p1 = new Promise(function (resolve, reject) {
+                resolve('成功');
+              });
+              p1.then(console.log, console.error);
+              // "成功"
+
+              var p2 = new Promise(function (resolve, reject) {
+                reject(new Error('失败'));
+              });
+              p2.then(console.log, console.error);
+              // Error: 失败
+      // then用法辨析
+          var f1=new Promise(function(resolve){
+            resolve("成功")
+          })
+          // 方法一
+          f1().then(function(){
+            return f2();
+          }).then(f3);
+          // f3回调函数的参数是f2运行的结果
+
+          // 方法二
+          f1().then(function(){
+            f2();
+            return;
+          }).then(f3)
+          // f3的参数为undefined
+
+          // 方法三
+          f1().then(f2()).then(f3)
+          // f3回调函数的参数，是f2函数返回的函数的运行结果
+
+          // 方法四
+          f1().then(f2).then(f3)
+          // f2会接收到f1()返回的结果
+
+      // 实例：图片加载
+          var preloadImage = function(path){
+            return new Promise(function(resolve,reject){
+              var image=new Image();
+              image.onload=resolve;
+              image.onerror=reject;
+              image.path=path;
+            })
+          }
+          preloadImage("https://example.com/my.jpg")
+          .then(function(e){
+            document.body.append(e.target);
+          }).then(function(){
+            console.log("加载成功")
+          })
+
+      // 小结
+          //优点：
+              // 让回调函数变成了规范的链式写法，程序流程清晰
+              // 一整套接口，同时执行多个异步操作 等到他们的状态都改变以后，再执行一个回调函数
+              // 为多个回调函数中抛出的错误，统一指定处理方法等到
+              // 他的状态一旦改变，无论何时查询，都能得到这个状态
+          // 缺点：编写难度比传统写法高，阅读不是一眼就能看懂的，必须在一堆then回调函数中理清逻辑
+
+      // 微任务
+          // Promise回调函数属于异步任务，会在同步任务之后执行
+              new Promise(function(resolve,reject){
+                resolve(1)
+              }).then(console.log);
+              console.log("2");
+              // 2
+              // 1
+          // Promise回调函数不是正常的异步任务，而是微任务，
+          // 区别在于，正常任务追加到下一轮事件循环，微任务追加到本轮事件循环；意味着微任务执行时间一定早于正常任务
+              setTimeout(function() {
+                console.log(1);
+              }, 0);
+
+              new Promise(function (resolve, reject) {
+                resolve(2);
+              }).then(console.log);
+
+              console.log(3);
+              // 3
+              // 2
+              // 1
+              // then是本轮事件循环执行，setTimeout在下一轮事件循环开始执行
+
+}
 // 八、DOM
 {}
 // 九、事件

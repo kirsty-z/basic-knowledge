@@ -46,7 +46,7 @@ function extend(to, form) {
   for (let protoryte in from) {
     //判断是否是from自己的属性  过滤继承的属性  geiOwnPropertyDescriptor读不到继承属性
     if (!form.hasOwnProperty(prototype)) continue;
-    to.defineProperty(
+    Object.defineProperty(
       to,
       prototype,
       //获取prototype的描述对象
@@ -55,6 +55,29 @@ function extend(to, form) {
   }
   return to;
 }
+// 方法二
+// 确定拷贝后的对象，与原对象具有同样的原型
+// 确定拷贝后的对象，与原对象具有同样的实例属性
+function copyObject(orig){
+  var copy=Object.create(Object.getPrototypeOf(orig));
+  copyOwnPropertiesFrom(copy,orig);
+  return copy;
+}
+function copyOwnPropertiesFrom(target,orig){
+  Object.getOwnPropertyNames(orig).forEach((propKey)=>{
+    var desc = Object.getOwnPropertyDescriptor(orig,propKey);
+    Object.defineProperty(target,propKey,desc)
+  })
+  return target
+}
+// 方法三：更简单的方法拷贝一个对象
+function copyObject(orig) {
+  return Object.create(
+    Object.getPrototypeOf(orig),
+    Object.getOwnPropertyDescriptors(orig)
+  );
+}
+
 //防抖
 function aaa() {
   console.log("aaa", new Date());
