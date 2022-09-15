@@ -3783,28 +3783,28 @@
               p2.then(console.log, console.error);
               // Error: 失败
       // then用法辨析
-          var f1=new Promise(function(resolve){
+          var ff=new Promise(function(resolve){
             resolve("成功")
           })
           // 方法一
-          f1().then(function(){
+          ff().then(function(){
             return f2();
           }).then(f3);
           // f3回调函数的参数是f2运行的结果
 
           // 方法二
-          f1().then(function(){
+          ff().then(function(){
             f2();
             return;
           }).then(f3)
           // f3的参数为undefined
 
           // 方法三
-          f1().then(f2()).then(f3)
+          ff().then(f2()).then(f3)
           // f3回调函数的参数，是f2函数返回的函数的运行结果
 
           // 方法四
-          f1().then(f2).then(f3)
+          ff().then(f2).then(f3)
           // f2会接收到f1()返回的结果
 
       // 实例：图片加载
@@ -3861,7 +3861,167 @@
 // 九、事件
 {}
 // 十、浏览器模型
-{}
+{
+  // 浏览器模型概述
+      // JavaScript是浏览器内置脚本；浏览器加载网页，就会执行脚本，从而达到操纵浏览器的目的，实现网页的各种动态效果
+      // 代码嵌入网页的方法
+          // <script>元素直接嵌入代码
+              /*<script>
+                var x=1+5;
+                console.log(x);
+              </script>
+              */
+              // <script>标签有一个type属性，用来执行脚本类型
+                  // type属性可以设置两种值
+                  // text/javascript:默认值，老式浏览器设置比较好
+                  // application/javascript:比较新的浏览器设置比较好
+                  // 如果type的值，浏览器不认识，那么就不会执行它的代码，
+                  /*
+                  <script id="mydata" type="x-custom-data">
+                    console.log('Hello World');
+                  </script>
+                  document.getElementById('mydata').text
+                  //   console.log('Hello World');
+                  */
+
+          // <script>标签加载外部脚本
+              // 可以指定加载外部的脚本文件
+                  // <script src="https://www.example.com/script.js"></script>
+              // 如果使用了非英文字符，应该注明字符的编码
+                  // <script charset="utf-8" src="https://www.example.com/script.js"></script>
+              // 脚本必须是纯的JavaScript代码，不能有HTML和<script>标签
+              // 外部加载脚本和直接添加代码块，这两种方法不能混用
+                  // <script charset="utf-8" src="example.js">
+                  //   console.log('Hello World!');
+                  // </script>
+                  // 代码console.log语句直接忽略
+              // 为了防止攻击者篡改外部脚本，script标签允许设置一个integrity属性，写入该外部脚本hash签名，用来验证脚本一致性
+                  // <script src="/assets/application.js"
+                  //   integrity="sha256-TvVUHzSfftWg1rcfL6TIJ0XKEGrgLyEq6lEpcmrG9qs=">
+                  // </script>
+                  // 一旦有人改了这个脚本，导致 SHA256 签名不匹配，浏览器就会拒绝加载
+
+          // 事件属性
+              // 网页元素的事件属性，可以写入JavaScript代码；当指定事件发生，就调用这些代码
+                  // <button id="myBtn" onclick="console.log(this.id)">点击</button>
+
+          // URL协议
+              // URL直接JavaScript：协议，即在URL位置写入代码，使用这个URL就会自行JavaScript代码
+                  // <a href="javascript:console.log('Hello')">点击</a>
+                  // 如果 JavaScript 代码返回一个字符串，浏览器就会新建一个文档，展示这个字符串的内容，原有文档的内容都会消失。
+                  // javascript:协议的常见用途是书签脚本 Bookmarklet
+                  // 为了防止书签替换掉当前文档，可以在脚本前加上void，或者在脚本最后加上void 0
+                      // <a href="javascript: void new Date().toLocaleTimeString();">点击</a>
+                      // <a href="javascript: new Date().toLocaleTimeString();void 0;">点击</a>
+
+      // script元素
+          // 工作原理
+              // 1、浏览器一边下载 HTML 网页，一边开始解析。也就是说，不等到下载完，就开始解析。
+              // 2、解析过程中，浏览器发现<script>元素，就暂停解析，把网页渲染的控制权转交给 JavaScript 引擎。
+              // 3、如果<script>元素引用了外部脚本，就下载该脚本再执行，否则就直接执行代码。
+              // 4、JavaScript 引擎执行完毕，控制权交还渲染引擎，恢复往下解析 HTML 网页。
+              // 如果脚本运行时间过长，浏览器会一直等到脚本下载完成，造成网页长时间失去响应，浏览器就会呈现假死状态，成为阻塞效应
+              // 为了避免这种情况，将<script>标签放在页面底部而不是头部
+
+          // defer属性
+              // 解决网页阻塞问题，一个方法是<script>标签加入defer属性；延迟加载作用，dom加载生成后，在执行脚本
+                  // <script src="a.js" defer></script>
+              // defer属性的运行流程
+                  // 浏览器开始解析html网页
+                  // 解析过程中，发现带有defer属性的<script>元素
+                  // 浏览器继续往下解析 HTML 网页，同时并行下载<script>元素加载的外部脚本。
+                  // 浏览器完成解析 HTML 网页，此时再回过头执行已经下载完成的脚本
+              // 对于内置而不加载外部脚本的script标签，以及动态生成的script标签，defer不起作用
+              // 使用defer加载的外部脚本不应该使用document.write方法。
+
+          // async属性
+              // 解决组赛效应另一个方法
+                  // <script src="a.js" async></script>
+              // 作用是，使用另一个进程下载脚本，下载时不会阻塞渲染
+                  // 浏览器开始解析 HTML 网页。
+                  // 解析过程中，发现带有async属性的script标签。
+                  // 浏览器继续往下解析 HTML 网页，同时并行下载<script>标签中的外部脚本。
+                  // 脚本下载完成，浏览器暂停解析 HTML 网页，开始执行下载的脚本。
+                  // 脚本执行完毕，浏览器恢复解析 HTML 网页。
+              // 无法保证脚本的执行顺序，哪个脚本先下载完，先执行哪个
+              // 使用async属性的脚本文件里面的代码，不应该使用document.write方法
+
+              // 如果脚本之间没有依赖关系，使用async；如果脚本之间存在依赖关系，使用defer
+              // 如果同时使用async和defer属性，后者不起作用，浏览器行为由async属性决定
+
+          // 脚本的动态加载
+              // <script>元素还可以动态生成，生成后再插入页面，从而实现脚本的动态加载。
+              // 好处：不会造成页面阻塞；也不会造成浏览器假死状态
+              // 缺点：无法保证脚本的执行顺序，哪个先下载完成先执行哪个
+                  // 避免这个问题，设置async属性为false
+                  ["a.js","b.js"].forEach(function(src){
+                    var script = document.createElement("script");
+                    script.src=src;
+                    script.async=false;
+                    document.head.appendChild=script;
+                  })
+              // 为动态加载脚本指定回调函数
+                  function loadScript(src, done) {
+                    var js = document.createElement('script');
+                    js.src = src;
+                    js.onload = function() {
+                      done();
+                    };
+                    js.onerror = function() {
+                      done(new Error('Failed to load script ' + src));
+                    };
+                    document.head.appendChild(js);
+                  }
+
+          // 加载使用的协议
+              // 如果不指定协议，浏览器默认采用 HTTP 协议下载
+                  // <script src="example.js"></script>
+              // 如果要采用 HTTPS 协议下载，必需写明
+                  // <script src="https://example.js"></script>
+              // 根据页面自身的协议来决定加载协议
+                  // <script src="//example.js"></script>
+
+      //浏览器的组成
+          // 浏览器核心部分：渲染引擎和JavaScript引擎（解释器）
+          // 渲染引擎
+              // 渲染引擎的作用：将网页代码渲染为用户视觉可以感知的平面文档
+          // 不同浏览器有不同渲染引擎
+              // firefox：Gecko引擎
+              // safari：webkit引擎
+              // Chrome：blink引擎
+              // IE：trident引擎
+              // Edge：degeHTML引擎
+          // 渲染引擎处理网页，分为四个阶段
+              // 解析代码：HTML 代码解析为 DOM，CSS 代码解析为 CSSOM（CSS Object Model）。
+              // 对象合成：将 DOM 和 CSSOM 合成一棵渲染树（render tree）。
+              // 布局：计算出渲染树的布局（layout）。
+              // 绘制：将渲染树绘制到屏幕。
+
+      // 重流和重绘
+          // 渲染树转换为网页布局，称为流布局；布局显示到页面的这个过程，称为绘制
+          // 页面生成后，脚本操作和样式表操作，都会触发重流和绘制
+          // 重绘和重流并不一定一起发生，重流必定导致重绘，重绘不一定需要重流
+
+
+
+
+
+
+  // window对象
+  //Navigator对象，Screen对象
+  // Cookie
+  // XMLHttpRequest对象
+  // 同源限制
+  // CORS通信
+  // Storage接口
+  // History对象
+  // Location对象，URL对象，URLSearhParams对象
+  // ArrayBuffer对象，Blob对象
+  // File对象，FileList对象，FileReader对象
+  // 表单，FormData对象
+  // IndexedDB API对象
+  // Web Worker
+}
 // 十一、网页元素接口
 {}
 
