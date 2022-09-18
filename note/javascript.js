@@ -51,8 +51,8 @@
       123e3   //123000
       123e-3  //0.123
 //   数值的进制
-//     ox：十六进制
-//     ob：二进制
+//     0x：十六进制
+//     0b：二进制
 //     0：十进制
 //     parseInt（string，radix）radix：2-36之间的整数
        parseInt("11",4)//5   1*4**1+1*4**0
@@ -4853,15 +4853,210 @@
                       // 不限于浏览器在“预检”中请求的字段。
                   // Access-Control-Allow-Credentials：布尔值，允许发送cookie
                   // Access-Control-Max-Age：可选，用来指定本次预检请求的有效期，单位为秒
-
-
+          //浏览器的正常请求和回应
+              // 一旦服务器通过预检请求，以后每次浏览器正常的CORS请求，就跟简单请求一样，会有一个Oringin头信息字段
+              // 服务器的回应，也会有一个Access-Control-Allow-Origin头信息字段
+                 /* PUT /cors HTTP/1.1
+                  Origin: http://api.bob.com
+                  Host: api.alice.com
+                  X-Custom-Header: value
+                  Accept-Language: en-US
+                  Connection: keep-alive
+                  User-Agent: Mozilla/5.0... */
+                // 上面头信息的Origin字段是浏览器自动添加的
+                // 下面服务器正常反应
+                      // Access-Control-Allow-Origin: http://api.bob.com
+                      // Content-Type: text/html; charset=utf-8
 
       // 与JSONP比较
-
+          // 使用目的相同，但比JSONP强大
+          // JSONP只支持GET请求，CORS 支持所有类型的 HTTP 请求
+          // JSONP 的优势在于支持老式浏览器，以及可以向不支持 CORS 的网站请求数据
 
   // Storage接口
+      // 概述
+          // Storage接口用于在浏览器保存数据
+          // 两个对象部署了这个接口
+              // window.sessionStorage 和 window.localStorage
+          // sessionStorage保存数据用于浏览器的一次会话，当会话结束（通常是关闭窗口），数据被清空
+          // localStorage保存的数据长期存在，下一次访问，网页可以直接读取以前保存的数据
+          // 除了保存期限不同，这两个对象其他方面一致
+          // 保存数据以键值对形式存在，以文本格式保存
+
+      // 属性和方法
+          //Storage接口只有一个属性
+          // Storage.length:返回保存的数据项的个数
+              window.localStorage.setItem('foo', 'a');
+              window.localStorage.setItem('bar', 'b');
+              window.localStorage.setItem('baz', 'c');
+              window.localStorage.length // 3
+
+          // Storage.setItem()
+              // 用于存入数据；接受两个参数，第一个是键名；第二个是存入的数据
+              // 如果键名存在，会更新已有的键值；没有返回值
+                  window.sessionStorage.setItem('key', 'value');
+                  window.localStorage.setItem('key', 'value');
+              // 两个参数都是字符串，不是字符串，会自动转为字符串，在存入浏览器
+              // 写入也可以直接赋值
+                  // 下面三种写法等价
+                  window.localStorage.foo = '123';
+                  window.localStorage['foo'] = '123';
+                  window.localStorage.setItem('foo', '123');
+
+          // Storage.getItem():读取数据；只有一个参数，字符串，就是键名
+              window.sessionStorage.getItem('key')
+              window.localStorage.getItem('key')
+
+          // Storage.removeItem():清除某个键名对应的键值
+          // Storage.clear():用于清除所有的保存的数据；返回undefined
+          // Storage.key():接受一个整数作为参数（从0开始），返回对应位置的键名
+              window.sessionStorage.setItem('key', 'value');
+              window.sessionStorage.key(0) // "key"
+              // Storage.length 和Storage.key()可以遍历所有的键
+              for (var i = 0; i < window.localStorage.length; i++) {
+                console.log(localStorage.key(i));
+              }
+
+      // storage事件
+          // Storage接口存储数据发生变化时，会触发Storage事件，可以指定这个事件的监听函数
+              window.addEventListener('storage', onStorageChange);
+              // 监听函数接受一个event实例对象作为参数；这个对象继承了StorageEvent接口，有几个特有的属性，只读
+                  // StorageEvent.key：字符串，表示发生变动的键名
+                  // StorageEvent.newValue：字符串，表示新的键值；如果clear()方法或删除该键值引发的，返回null
+                  // StorageEvent.oldValue：字符串，表示旧的键值。如果该键值对是新增的，该属性返回null
+                  // StorageEvent.storageArea：对象，返回键值对所在的整个对象
+                  // StorageEvent.url：字符串，表示原始触发 storage 事件的那个网页的网址
+                  function onStorageChange(e) {
+                    console.log(e.key);
+                  }
+
+                  window.addEventListener('storage', onStorageChange);
+                  // 它不在导致数据变化的当前页面触发，而是在同一个域名的其他窗口触发
+                  // 通过这种机制，实现多个窗口之间的通信
+
   // History对象
+      // 概述
+          // window.hsitory指向History对象，它表示当前窗口的浏览历史
+          // History对象保存了当前窗口访问过的所有页面网址
+              window.history.length;//3
+          // 安全原因，浏览器不允许脚本读取这些地址，但是允许地址之间导航
+              // 后退到前一个网址
+              history.back()
+              // 等同于
+              history.go(-1)
+
+      // 属性
+          // History主要有两个属性
+              // History.length：当前窗口访问过的网址数量（包括当前网页）
+              // History.state：History 堆栈最上层的状态值；通常undefined，即未设置
+
+      // 方法
+          // History.back(),History.forword()，History.go()
+                // History.back()：移动到上一个网址，等同于点击浏览器的后退键。对于第一个访问的网址，该方法无效果。
+                // History.forward()：移动到下一个网址，等同于点击浏览器的前进键。对于最后一个访问的网址，该方法无效果。
+                // History.go()：接受一个整数作为参数，以当前网址为基准，移动到参数指定的网址，比如go(1)相当于forward()，go(-1)相当于back()
+                    History.go(0);//相当与刷新页面
+                // 移动到以前访问过的页面时，页面通常是从浏览器缓存之中加载，而不是重新要求服务器发送新的网页
+
+          // History.pushState()
+              // 在历史记录中添加一条记录
+              window.history.pushState(state, title, url);
+              // 接受三个参数
+                  // state：一个与添加的记录相关联的状态对象，主要用于popstate事件。
+                  // title：新页面的标题；可以填空字符串
+                  // url：新的网址，必须与当前页面处在同一个域。浏览器的地址栏将显示这个网址
+                      var stateObj = { foo: 'bar' };
+                      history.pushState(stateObj, 'page 2', '2.html');
+                      history.state // {foo: "bar"}
+                      // 假定当前网址是example.com/1.html
+                      // 添加新纪录后，浏览器地址栏立马显示example.com/2.html
+                      // 但并不会跳转到2.html，甚至也不会检查2.html是否存在，只是成为浏览历史中的最新记录
+
+                    // 如果pushState()方法设置了一个跨域网址，则会报错
+                        // 当前网址为 http://example.com
+                        history.pushState(null, '', 'https://twitter.com/hello');
+
+          // History.replaceState()用来修改 History 对象的当前记录，其他都与pushState()方法一模一样
+
+      // popstate事件
+          // 当同一个文档浏览历史（及History）发生变化时，就会触发popstate事件
+          // 注意：仅仅调用pushState 和replaceState方法不会触发该事件
+          // 只有用户点击浏览器倒退按钮和前进按钮，或者使用 JavaScript
+            // 调用History.back()、History.forward()、History.go()方法时才会触发
+
   // Location对象，URL对象，URLSearhParams对象
+      // Location对象
+          // 概述
+              // URL是网络的基础设施之一
+              // Location是浏览器提供的原生对象，提供URL相关信息和操作方法
+              // 通过window.location和document.location属性，可以拿到这个对象
+          // 属性
+              // Location.href：整个 URL。
+              // Location.protocol：当前 URL 的协议，包括冒号（:）。
+              // Location.host：主机。如果端口不是协议默认的80和433，则还会包括冒号（:）和端口。
+              // Location.hostname：主机名，不包括端口。
+              // Location.port：端口号。
+              // Location.pathname：URL 的路径部分，从根路径/开始。
+              // Location.search：查询字符串部分，从问号?开始。
+              // Location.hash：片段字符串部分，从#开始。
+              // Location.username：域名前面的用户名。
+              // Location.password：域名前面的密码。
+              // Location.origin：URL 的协议、主机名和端口。 只读
+          // 方法
+              // Location.assign():接受一个URL字符串作为参数，使浏览器立即跳转到新的URL；如果URL不正确，则报错
+                  document.location.assign('http://www.example.com')
+              // Location.replace():接受一个URL字符串作为参数，使浏览器立即跳转到新的URL；如果URL不正确，则报错
+                  // 与assign的区别：replace会在浏览器的浏览历史History里面删除当前网址，一旦使用了该方法，后退按钮就无法回到当前网页了
+                  // 相当与一个新的URL替换了旧的URL
+                  // 应用是，当脚本发现当前是移动设备时，就立刻跳转到移动版网页
+              // Location.reload()
+                  // 使得浏览器重新加载当前网址，相当于按下浏览器的刷新按钮
+                  // 接受一个布尔值作为参数，如果为true，浏览器从服务器从新请求这个网页；加载后，网页将滚动到头部（scrollTop===0）
+                      // 如果为false：浏览器从本地缓存重新加载网页，重新加载后，网页视口不变
+                      window.location.reload(true);
+              // Location.toString():返回整个 URL 字符串，相当于读取Location.href属性
+
+      // URL的编码和解码
+          //URL包含两类合法的字符
+              // URL元字符
+                  // ;  ,  /  ?  :  @  #  $   %  =   +
+              // 语义字符
+                  // 0-9 a-z A-Z  -  _  .  !    ~  *  '   ()
+              // 四个编码/解码
+                  // encodeURL()
+                      // 转码整个 URL；参数为字符串，代表整个URL
+                      // 会将元字符和语义字符之外的字符，都进行转义
+                  // encodeURLComponent()
+                      // 用于转码 URL 的组成部分，会转码除了语义字符之外的所有字符
+                      // 即元字符也会被转码
+                      // 不能用于转码整个 URL。它接受一个参数，就是 URL 的片段
+                  // decodeURL()
+                      // 用于整个 URL 的解码。它是encodeURI()方法的逆运算。
+                      // 它接受一个参数，就是转码后的 URL
+                  // decodeURLComponent()
+                      // encodeURIComponent()方法的逆运算
+                      // 它接受一个参数，就是转码后的 URL 片段
+
+      // URL接口
+          //构造函数
+              // URL()作为构造函数，可以生成URL实例
+          // 实例属性
+          // 静态方法
+              // URL.createObjectURL():用来为上传/下载的文件、流媒体文件生成一个URL字符串
+              // URL.revokeObjectURL()：用来释放URL.createObjectURL()方法生成的 URL 实例
+
+      // URLSearchParams对象
+          // 概述
+              //URLSearchParams对象浏览器的原生对象，用来构造、解析和处理 URL 的查询字符串（即 URL 问号后面的部分）
+              var params = new URLSearchParams('?foo=1&bar=2');
+              // 等同于
+              var params = new URLSearchParams(document.location.search);
+          // URLSearchParams.toString():返回实例的字符串形式
+              var url = new URL('https://example.com?foo=1&bar=2');
+              var params = new URLSearchParams(url.search);
+              params.toString() // "foo=1&bar=2'
+
+
   // ArrayBuffer对象，Blob对象
   // File对象，FileList对象，FileReader对象
   // 表单，FormData对象

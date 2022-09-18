@@ -15,10 +15,6 @@
     2、原型链
     3、promise
     4、es6 去重
-    5、v-if v-show
-        v-if:渲染和删除，性能开销大
-        v-show:隐藏和显示，性能开销小
-
 
 
 ##react
