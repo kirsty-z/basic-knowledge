@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<style>
+  div {
+    background: gray;
+    width: 200px;
+    height: 200px;
+    position: relative;
+  }
+
+  div>p {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: red;
+    width: 50px;
+    height: 25px;
+    background: white;
+    text-align: center;
+    line-height: 25px;
+    cursor: pointer;
+  }
+</style>
+
+<body>
+  <div id="father">
+    <p>点击</p>
+  </div>
+</body>
+
+</html>
+<script>
+  var phases = {
+    1: "capture",
+    2: "target",
+    3: "bobble"
+  };
+  var div = document.querySelector("#father");
+  var p = document.querySelector("#father>p");
+  div.addEventListener("click", callback, true);
+  p.addEventListener("click", callback, true);
+  div.addEventListener("click", callback, false);
+  p.addEventListener("click", callback, false);
+
+  function callback(event) {
+    var tag = event.currentTarget.tagName;
+    var phase = phases[event.eventPhase];
+    console.log("Tag: " + tag + "阶段： " + phase)
+  }
+
+</script>

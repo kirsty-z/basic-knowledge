@@ -5055,20 +5055,291 @@
               var url = new URL('https://example.com?foo=1&bar=2');
               var params = new URLSearchParams(url.search);
               params.toString() // "foo=1&bar=2'
-
+          // URLSearchParams.append():用来追加一个查询参数
+          // URLSearchParams.delete():用来删除指定的查询参数
+          // URLSearchParams.has()：返回一个布尔值，表示查询字符串是否包含指定的键名
+          // URLSearchParams.set()：用来设置查询字符串的键值
+          // URLSearchParams.get()用来读取查询字符串里面的指定键。它接受键名作为参数
+          // URLSearchParams.getAll()返回一个数组，成员是指定键的所有键值。它接受键名作为参数
+          // URLSearchParams.sort()对查询字符串里面的键进行排序，规则是按照 Unicode 码点从小到大排列
+          // URLSearchParams.keys()返回的是键名的遍历器
+          // URLSearchParams.values()返回的是键值的遍历器
+          // URLSearchParams.entries()返回的是键值对的遍历器
 
   // ArrayBuffer对象，Blob对象
+      // 表示一段二进制数据，用来模拟内存里面的数据
+          var buffer= new ArrayBuffer(8);
+          // 实例对象buffer占用8个字节
+          // 实例属性byteLength，表示当前实例占用的内存长度（单位字节）
+          buffer.byteLength;//8
+          // 实例方法slice()，用来复制一部分内存。
+              // 它接受两个整数参数，分别表示复制的开始位置（从0开始）和结束位置（复制时不包括结束位置）
+              // 如果省略第二个参数，则表示一直复制到结束
+                  var buf2 = buf1.slice(0);
+
+      // Blob对象
+          // 表示一个二进制文件的数据内容，比如一个图片文件的内容就可以通过 Blob 对象读写
+          // 它与 ArrayBuffer 的区别在于，它用于操作二进制文件，而 ArrayBuffer 用于操作内存
+          // 接受两个参数
+              // 第一个是数组，成员是字符串或二进制对象；表示新生成的Blob实例对象的内容
+              // 可选，是一个配置对象，只有一个属性type值是一个字符串，表示数据的 MIME 类型，默认是空字符串
+              var obj = { hello: 'world' };
+              var blob = new Blob([ JSON.stringify(obj) ], {type : 'application/json'});
+          // 实例属性和方法
+              // Blob具有两个实例属性size和type，分别返回数据的大小和类型
+              // 实例方法slice，用来拷贝原来的数据，返回的也是一个Blob实例
+              myBlob.slice(start, end, contentType)
+              // 起始位置（从0开始） 结束的字节位置  （默认size属性的值，该位置不包含在內）
+                        // 新实例的数据类型（默认为空字符串）
+          // File 实例对象是一个特殊的 Blob 实例，增加了name和lastModifiedDate（文件的最后修改时间）属性
+          // 下载文件，指定responseType属性为blob，下载下来的就是一个 Blob 对象
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url);
+                xhr.responseType = 'blob';
+          // 读取对象
+              // 取得 Blob 对象以后，可以通过FileReader对象，读取 Blob 对象的内容，即文件内容
+              // FileReader 对象提供四个方法，处理 Blob 对象
+                  // FileReader.readAsText()：返回文本，需要指定文本编码，默认为 UTF-8。
+                  // FileReader.readAsArrayBuffer()：返回 ArrayBuffer 对象。
+                  // FileReader.readAsDataURL()：返回 Data URL。
+                  // FileReader.readAsBinaryString()：返回原始的二进制字符串
+
   // File对象，FileList对象，FileReader对象
+      // File:File 对象代表一个文件，用来读写文件信息。它继承了 Blob 对象，或者说是一种特殊的 Blob 对象
+          // 构造函数
+              // new File(array,name,[,option])
+              // File()的三个参数
+                  // array：一个数组，成员可以是二进制对象或字符串，表示文件的内容。
+                  // name：字符串，表示文件名或文件路径。
+                  // options：配置对象，设置实例的属性。该参数可选。
+              // 第三个参数配置对象，可以设置两个属性。
+                  // type：字符串，表示实例对象的 MIME 类型，默认值为空字符串。
+                  // lastModified：时间戳，表示上次修改的时间，默认为Date.now()
+                      var file = new File(
+                        ['foo'],
+                        'foo.txt',
+                        {
+                          type: 'text/plain',
+                        }
+                      );
+          // 实例属性和方法
+              // 实例属性
+                  // File.lastModified：最后修改时间
+                  // File.name：文件名或文件路径
+                  // File.size：文件大小（单位字节）
+                  // File.type：文件的 MIME 类型
+              // File 对象没有自己的实例方法，由于继承了 Blob 对象，因此可以使用 Blob 的实例方法slice()
+
+      // FileList:
+          // FileList对象是一个类似数组的对象，代表一组选中的文件，每个成员都是一个 File 实例
+          // 出现场合
+              // 文件控件节点（<input type="file">）的files属性，返回一个 FileList 实例。
+              // 拖拉一组文件时，目标区的DataTransfer.files属性，返回一个 FileList 实例。
+          // 实力属性length
+          // 主要方法item()
+
+      // FileReader对象
+          // 用于读取 File 对象或 Blob 对象所包含的文件内
+          // 浏览器原生提供一个FileReader构造函数，用来生成 FileReader 实例
+
+
   // 表单，FormData对象
+      // 表单概述
+          // 表单<form>用来征集用户提交的数据，发送到服务器
+
+      // FormDate对象
+          // 概述
+              // 表单数据以键值自动向服务器发送，这个过程是浏览器自动完成的
+              // FormDate()是一个构造函数，用来生成表单实例
+                  var formdata = new FormData(form);
+              // FormData()构造函数的参数是一个 DOM 的表单元素，构造函数会自动处理表单的键值对
+          //实例方法
+              // From.get(key):获取键名对应的键值
+              // From.getAll(key):返回一个数组，表示指定键名对应的所有键值
+              // From.set(key，value):置指定键名的键值，参数为键名;如果键名不存在，添加键值对
+              // From.delete(key):删除这个键值对
+              // From.append(key，value):添加一个键值对
+              // From.has(key):返回一个布尔值，表示是否具有该键名的键值对
+              // From.keys():返回一个遍历器对象，用于for...of循环遍历所有的键名
+              // From.values():返回一个遍历器对象，用于for...of循环遍历所有的键值
+              // From.entries():回一个遍历器对象，用于for...of循环遍历所有的键值对
+
+      // 表单的内置验证
+          //自动校验
+              // dom css
+          // checkValidity：表单元素和表单控件都有checkValidity()方法，用于手动触发校验
+              // 触发整个表单的校验
+                form.checkValidity()
+              // 返回一个布尔值，true表示通过校验，false表示没有通过校验
+          // willValidate属性是一个布尔值，表示该控件是否会在提交时进行校验
+          // validationMessage属性返回一个字符串，表示控件不满足校验条件时，浏览器显示的提示文本
+          // setCustomValidity()方法用来定制校验失败时的报错信息
+          // 控件元素的属性validity属性返回一个ValidityState对象，包含当前校验状态的信息
+          // 表单元素的 HTML 属性novalidate，可以关闭浏览器的自动校验
+
+      // enctype对象
+          // 表单能够用四种编码，向服务器发送数据；编码格式由表单的enctype属性决定
+          // GET：表单使用GET方法发送数据，enctype属性无效
+             /* <form
+                action="register.php"
+                method="get"
+                onsubmit="AJAXSubmit(this); return false;"
+              >
+              </form>*/
+          // application/x-www-form-urlencoded
+              // 如果表单用POST方法发送数据，并省略enctype属性
+                // 那么数据以application/x-www-form-urlencoded格式发送（因为这是默认值）
+          //text/plain
+              // 如果表单使用POST方法发送数据，enctype属性为text/plain，那么数据将以纯文本格式发送
+          // multipart/form-data
+              // 表单使用POST方法，enctype属性为multipart/form-data，那么数据将以混合的格式发送
+
+      // 文件上传
+          // 用户上传文件，也是通过表单
+          // 将表单<form>元素的method属性设为POST，enctype属性设为multipart/form-data
+          // enctype属性决定了 HTTP 头信息的Content-Type字段的值
+              // 默认情况下这个字段的值是application/x-www-form-urlencoded
+              // 但是文件上传的时候要改成multipart/form-data
+
   // IndexedDB API对象
+      // 概念
+          // Cookie大小不超过4kb，且每次请求都要发送会服务器
+          // LocalStorage:2.5M-10M之间，且不提供搜索功能，不能建立自定义索引
+          // IndexedDB 就是浏览器提供的本地数据库，它可以被网页脚本创建和操作
+          // 特点
+              // 键值对存储
+              // 异步
+              // 支持事物
+              // 同源限制
+              // 存储空间大
+              // 支持二进制存储
+
+      // 基本概念
+          // IndexedDB 是一个比较复杂的 API，涉及不少概念。它把不同的实体，抽象成一个个对象接口
+          // 接口
+              // 数据库：IDBDatabase 对象
+              // 对象仓库：IDBObjectStore 对象
+              // 索引： IDBIndex 对象
+              // 事务： IDBTransaction 对象
+              // 操作请求：IDBRequest 对象
+              // 指针： IDBCursor 对象
+              // 主键集合：IDBKeyRange 对象
+
+          //概念
+              // 数据库：是一系列相关数据的容器。每个域名（严格的说，是协议 + 域名 + 端口）都可以新建任意多个数据库
+              // 对象仓库：每个数据库包含若干个对象仓库（object store）。它类似于关系型数据库的表格。
+              // 数据记录：对象仓库保存的是数据记录
+              // 索引：为了加速数据的检索，可以在对象仓库里面，为不同的属性建立索引
+              // 事物：数据记录的读写和删改，都要通过事务完成
+
+      // 操作流程
+          // 打开数据库
+              indexedDB.open()
+              //error 事件：error事件表示打开数据库失败
+              // success事件表示成功打开数据库
+              // upgradeneeded:如果指定的版本号，大于数据库的实际版本号，就会发生数据库升级事件upgradeneeded
+          // 新建数据库
+              // 新建数据库与打开数据库是同一个操作。如果指定的数据库不存在，就会新建
+              // 后续的操作主要在upgradeneeded事件的监听函数里面完成
+          // 新增数据
+              // 新增数据指的是向对象仓库写入数据记录
+          // 读取数据
+          // 遍历数据
+          // 更新数据
+          // 删除数据
+          // 使用索引
+
+      // indexedDB对象
+          // indexedDB.open()方法用于打开数据库
+              // 四种事件
+                  // success：打开成功。
+                  // error：打开失败。
+                  // upgradeneeded：第一次打开该数据库，或者数据库版本发生变化。
+                  // blocked：上一次的数据库连接还未关闭
+          // indexedDB.deleteDatabase()：用于删除一个数据库，参数为数据库的名字
+          // 、indexedDB.cmp()方法比较两个值是否为 indexedDB 的相同的主键
+
+      // IDBRequest对象
+          // 表示打开的数据库连接，indexedDB.open()方法和indexedDB.deleteDatabase()方法会返回这个对象
+
+      // IDBDateBase对象
+          // 打开数据成功以后，可以从IDBOpenDBRequest对象的result属性上面，拿到一个IDBDatabase对象，它表示连接的数据库
+
+      // IDBObjectStore 对象
+          // 对应一个对象仓库（object store）
+
+      // IDBTransaction 对象
+          // 用来异步操作数据库事务，所有的读写操作都要通过这个对象进行
+
+      // IDBIndex 对象
+          // 代表数据库的索引，通过这个对象可以获取数据库里面的记录
+
+      // IDBCursor 对象
+          // 代表指针对象，用来遍历数据仓库（IDBObjectStore）或索引（IDBIndex）的记录
+
+      // IDBKeyRange 对象
+          // 代表数据仓库（object store）里面的一组主键。根据这组主键，可以获取数据仓库或索引里面的一组记录
+
   // Web Worker
+      // 概述
+          // JavaScript 语言采用的是单线程模型，也就是说，所有任务只能在一个线程上完成，一次只能做一件事
+          // 作用，就是为 JavaScript 创造多线程环境，允许主线程创建 Worker 线程，将一些任务分配给后者运行
+          // 同时运行，互不打扰，worker运行结束，结果返回到主线程；主线程保持通畅，不被阻塞或者拖慢
+          // 注意：
+              // 同源限制
+              // DOM限制
+              // 全局对象限制
+              // 通信联系
+              // 脚本限制
+              // 文件限制
+
+      // 基本用法
+          // 主线程
+              var worker = new Worker('work.js');
+              // 主线程调用worker.postMessage()方法，向 Worker 发消息
+              // 主线程通过worker.onmessage指定监听函数，接收子线程发回来的消息
+              // Worker 完成任务以后，主线程就可以把它关掉。
+                  worker.terminate();
+          // worker线程
+              //需要有一个监听函数，监听message事件
+          // 关闭worker
+              // 主线程
+              worker.terminate();
+              // Worker 线程
+              self.close();
+
+      // 数据通信
+      // 同网页的web worker
+      // 实例：worker线程完成事件轮询
+      // 实例：worker新建worker
+      // API
+
+      //cpu密集型：所有计算
+      // io密集型：网络io：请求；硬盘io：读写文件
 }
 // 十一、网页元素接口
 {}
-//
+// addEventListener(type,listener,userCapure)
+    // userCapure:true:只在捕获阶段触发，false:只在冒泡阶段触发  默认false
 
-
-
-
+//事件传播
+    // 一件事发生后，父元素和子元素之间的传播
+        // 第一阶段：从window对象传导到目标节点（上层传到底层），称事件捕获
+        // 第二阶段：从目标节点触发，称为目标阶段
+        // 第三阶段：从目标节点传回window对象（从底层传回上层），称事件冒泡
+    // 事件代理
+        // 由于事件会在冒泡阶段向上传播到父节点，因此把子节点的监听函数定义到父节点上，由父节点监听函数统一处理多个子元素的事件
+        // cancelable:返回一个布尔值，表示该事件是否可以取消
+        // preventDefault()：取消浏览器对当前事件的默认行为；
+            // 调用之前，判断一下Event.calcelable属性是否为true
+            /*if (event.cancelable) {
+              event.preventDefault();
+            }*/
+        // cancelBubble：属性是一个布尔值，可以阻止事件的传播;
+            // 如果设为true，相当于执行Event.stopPropagation()
+        // stopPropagation：阻止事件在 DOM 中继续传播，防止再触发定义在别的节点上的监听函数
+            // 但是不包括在当前节点上其他的事件监听函数
+        //stopImmedaitePropagation:阻止该事件的传播；比stopPropagation更彻底
+              // 阻止同一个事件的其他监听函数被调用，不管监听函数定义在当前节点还是其他节点
 
 

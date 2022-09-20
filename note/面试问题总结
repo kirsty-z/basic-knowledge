@@ -9,12 +9,23 @@
 
 ##css
     1、盒子水平垂直居中
+    2.felx布局
 
 ##js
     1、闭包
-    2、原型链
+    2、原型链 原型
     3、promise
     4、es6 去重
+    5、storage
+    6、三个绑定
+    7、 事件冒泡和捕获 阻止传播
+    8、防抖节流
+    9、作用域
+    10、call apply bind
+    11、内存泄露
+        全局变量 闭包 setTimeout setInterval console.log打印到控制台对象  循环引用
+
+
 
 
 ##react
@@ -26,6 +37,7 @@
     6、react  fiber原理
     7、redux
     8、调试工具与性能优化
+    9、如何封装一个组件
 
 
 ##其他

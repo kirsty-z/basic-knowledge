@@ -44,7 +44,7 @@ console.log(b.name, b.age);
 //拷贝一个对象
 function extend(to, form) {
   for (let protoryte in from) {
-    //判断是否是from自己的属性  过滤继承的属性  geiOwnPropertyDescriptor读不到继承属性
+    //判断是否是from自己的属性  过滤继承的属性  getOwnPropertyDescriptor读不到继承属性
     if (!form.hasOwnProperty(prototype)) continue;
     Object.defineProperty(
       to,
