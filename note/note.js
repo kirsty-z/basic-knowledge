@@ -97,3 +97,27 @@ let bb = debounce(aaa, 500);
 for (let i = 0; i < 5; i++) {
   bb();
 }
+// promise + ajax
+let getJson=function(url){
+  return new Promise((resolve,reject)=>{
+    function handle(){
+      if(this.readState !==4) return;
+      if(this.status ==200){
+        resolve(this.response)
+      }else{
+        reject(new Error(this.statusText))
+      }
+    }
+    var xml=new XMLHttpRequest();
+    xml.open("GET",url);
+    xml.onreadystatechange=handle;
+    xml.responseType="json";
+    sml.setRequestHeader("","Accept","application/json");
+    xml.send();
+  })
+}
+getJson("http://example.com").then(function(json){
+  console.log("contents:"+json)
+}).catch(function(error){
+  console.error('出错了', error);
+})

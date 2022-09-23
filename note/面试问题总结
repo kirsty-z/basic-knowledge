@@ -24,6 +24,8 @@
     10、call apply bind
     11、内存泄露
         全局变量 闭包 setTimeout setInterval console.log打印到控制台对象  循环引用
+    12. promise await(.then) async
+    13、Prototype __proto__
 
 
 
@@ -42,3 +44,4 @@
 
 ##其他
     1、介绍项目参与的模块
+    2、冒泡排序 二分查找  快速排序
