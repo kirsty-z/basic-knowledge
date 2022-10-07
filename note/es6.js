@@ -175,7 +175,7 @@
             // 写法一
             let promise2 = new Promise(function(resolve, reject) {
               try {
-                throw new Error('test');
+                // throw new Error('test');
               } catch(e) {
                 reject(e);
               }
@@ -186,7 +186,7 @@
 
             // 写法二
             const promise3 = new Promise(function(resolve, reject) {
-              reject(new Error('test'));
+              // reject(new Error('test'));
             });
             promise3.catch(function(error) {
               console.log(error);
@@ -665,12 +665,179 @@ const { Script } = require("vm");
               // 多个async，不能包正顺序
       // ES6模块，使用<script>标签，要加入type="module"属性，都是异步加载；等同打开了defer属性；
           // 一旦使用async，<script type="module">就不会按照页面出现顺序执行，加载完就执行该模块
-
-
+      // 对于外部模块脚本，需注意
+          // 代码实在模块作用域运行，而不是在全局作用域运行；模块内部的顶层变量，外部不可见
+          // 模块脚本自动采用严格模式，不管有没有使用use strict；
+          // 模块之中，可以用import命令加载其他模块（.js后缀不可省略，需要提供绝对URL或相对URL）；也可以使用export命令输出对外接口
+          // 模块之中，顶层this关键字返回undefined，而不是指向window。也就是说，在模块顶层使用this关键字是无意义的
+          // 同一个模块加载多次，将只执行一次
+      // 利用顶层的this等于undefined这个语法点，可以侦测当前代码是否在 ES6 模块之中
 
   // ES6模块与CommonJS模块的差异
+      // ES6模块与CommonJS三重大差异
+          // CommonJS输出的是一个值的拷贝；ES6输出的是值的引用
+          // CommonJS是运行时加载；ES6是编译时输出接口
+          // CommonJS模块的require是同步加载模块；ES6模块的import是异步加载，有一个独立的模块依赖的解析阶段
+      // CommonJS加载一个对象，该对象只有在脚本运行完成时才产生
+      // ES6模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成
+
   // Node.js的模块加载方法
+    // 概述
+        // JavaScript现在有两种模块，Es6模块，简称ESM；CommonJS模块，简称CJS
+        // CommonJS是node.js专用，与ES6不兼容，语法上有明显差异，CommonJS使用require和module.exports；ES6模块使用import和export
+        // Node.js要求ES6模块采用.mjs后缀名文件，才能使用export和import命令
+            // 不希望采用.mjs后缀名，在package.json文件中，指定type字段为module
+            // 一旦设置，该项目js脚本，就被解释为ES6模块
+           /* {
+              "type":"module"
+            }*/
+        // 这时还要使用 CommonJS 模块，那么需要将 CommonJS 脚本的后缀名都改成.cjs
+            // 如果没有type字段，或者type设为common.js，则.js被解释为commonJS模块
+        // 注意：ES6模块和CommonJS模块尽量不要混用；require命令不能加载.mjs文件，会报错，只有import才能加载.mjs文件
+              // import不能加载.cjs文件，只有require才能加载.cjs文件
+
+    // package.json的main字段
+        // package.json文件只有两个字段可以指定模块入口的文件：main和exports
+            // main字段，指定模块加载的入口文件；适合比较简单模块
+            /*
+            * ./node_modules/es-module-package/package.json
+              {
+                "type":"module",
+                "main":"./src/index.js"
+              }
+              如果没有type字段，index.js就会被解释为 CommonJS 模块
+              */
+            // import命令可以加载这个模块
+            // // ./my-app.mjs
+            // import { something } from 'es-module-package';
+            // 实际加载的是 ./node_modules/es-module-package/src/index.js
+
+    // package.json的exports字段
+        // exports字段的优先级高于main，它有多种用法
+            // 子目录别名
+              // package.json文件的exports字段可以指定脚本或子目录的别名
+              /**
+               ./node_modules/es-module-package/package.json
+               {
+                {
+                  "exports":{
+                    "./submodule":"./src/submodule.js"
+                  }
+                }
+               }
+              //  加载文件
+              import submodule from "es-module-package/submodule";
+              // 加载 ./node_modules/es-module-package/src/submodule.js
+               *
+              // 子目录
+              {
+                {
+                  "exports":{
+                    "./features":"./src/features"
+                  }
+                }
+              }
+
+              import features from "es-module-package/features/x.js"
+              // 加载 ./node_modules/es-module-package/src/features/x.js
+               */
+            // main的别名
+                // exports 的别名如果是 . 就代表模块的主入口，优先级高于main字段，可以简写成exports字段的值
+                /*
+                {
+                  "exports": {
+                    ".": "./main.js"
+                  }
+                }
+
+                // 等同于
+                {
+                  "exports": "./main.js"
+                }
+                */
+              //  exports只有支持ES6的node.js才认识，所以可以用来兼容旧版本的node.js
+                /**
+                 {
+                  "main":"./main-legacy.js",
+                  "exports":{
+                    ".":"./main-legacy.js"
+                  }
+                 }
+                 * /
+            // 条件加载
+                //  利用 .  别名，可以指定ES6和CommonJS不同入口
+                /**
+                 {
+                  "type": "module",
+                  "exports": {
+                    ".": {
+                      "require": "./main.cjs",
+                      "default": "./main.js"
+                    }
+                  }
+                }
+                 */
+    //CommonJS模块加载ES6模块
+       /*
+        (async ()=>{
+          import(./my-app.mjs);
+        })*/
+
+    // ES6模块加载CommonJS模块
+        // ES6 模块的import命令可以加载 CommonJS 模块，但是只能整体加载，不能只加载单一的输出项
+        /**
+         import packageMain from 'commonjs-package';
+          const { method } = packageMain;
+         * 另一种变通方法就是使用Node.js内置的module.createRequire()方法
+          // cjs.cjs
+          module.exports = 'cjs';
+
+          // esm.mjs
+          import { createRequire } from 'module';
+          const require = createRequire(import.meta.url);
+          const cjs = require('./cjs.cjs');
+          cjs === 'cjs'; // true
+         */
+
+    // 同时支持两种格式模式
+    // Node.js的内置模式
+        // 可以加载整体，也可以加载指定输出项
+        // import EventEmitter from "events";
+        // import {readFile} from "fs";
+    // 加载路径
+        // ES6模块的加载路径必须给出脚本的完整路径，不能省略后缀名
+        // import和package.json文件的main字段如果省略脚本的后缀名，会报错
+    // 内部变量
+        // ES6模块中this指向undefined
+        // CommonJS中this指向的是当前模块
+        // ES6模块中不存在的
+          // arguments
+          // require
+          // module
+          // exports
+          // __filename
+          // __dirname
+
   // 循环加载
+      // CommonJS模块的加载原理
+          // CommonJS的一个模块，就是一个脚本文件。require第一次加载脚本，就会执行整个脚本，然后在内存生成一个对象
+             /* {
+                id:"...",
+                exports:{},
+                loader:true,
+                ...
+              }
+              */
+            // id属性，模块名
+            // exports：模块输出的各个接口
+            // loader是一个布尔值，表示该脚本是否执行完毕
+          // 用到模块时，就在exports属性上取值；即使使用require命令，也不会在执行该模块，而是在缓存中取值
+          // 也就是说，CommonJS无论加载多少次，只会在第一次加载执行一次，以后再加载，只会返回第一次运行的结果，除非手动清除缓存
+      // CommonJS模块的循环加载
+          // CommonJS模块的重要特性是加载执行，即脚本在require时，就会全部执行；
+          // 一旦某个模块被循环加载，就只输出已执行的部分，还未执行的部分不会输出
+      // ES6是动态引用，如果使用import从一个模块加载变量，变量不会被缓存，而是成为一个指向被加载模块的引用
+
 }
 
 
