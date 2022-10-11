@@ -458,7 +458,7 @@
         // 在es6之前，社区指定了一些模块加载方案，主要CommonJS和AMD
             // CommonJS模块就是对象，输入时必须查找对象属性
                 let {stat,exists,readfile} =require("fs");//加载fs模块的方法
-const { Script } = require("vm");
+                const { Script } = require("vm");
         // ES6 模块不是对象，而是通过export命令显式指定输出的代码，再通过import命令输入
             // import {stat,exists,readfile} from "fs";
             //实质从fs模块加载了三个方法，其他方法不加载；这种加载称为编译时加载或者静态加载

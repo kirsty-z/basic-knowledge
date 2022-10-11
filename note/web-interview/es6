@@ -1,0 +1,44 @@
+##ES6
+1、var、let和const
+    申明变量，var变量提升，let代码块中有效，const定义常量，一旦定义不能改变
+
+2、es6数组新增的扩展
+    扩展元素符 ...
+    Array.from  :类似数组对象和可遍历对象转为数组
+    Array.of:将一组值转为数组
+    实例对象：find entries keys values includes
+
+3、es6对象新增的扩展
+    属性简写：对象的键与值相等，可以简写
+    super：指向当前对象的原型对象
+    扩展运算符...
+    属性遍历
+      for...in   keys getPropertyNames
+    新增对象的方法 Object.is  assign  values keys  entries
+
+4、es6函数新增
+    参数设置默认值
+    length
+    name
+    作用域
+    严格模式
+    箭头函数
+
+5、Set Map
+    Set：类似数组，但成员是唯一的值
+    Map：键值对的有序列表，键和值可以是任意类型
+
+6、Promise
+    JavaScript的异步解决方案，为异步操作提供统一接口
+    实例方法：then catch  finally
+    构造方法： all race resolve  reject
+
+7、模块
+    代码抽象 代码封装 代码复用 依赖管理
+    AMD（require.js） commonJS(exports require)
+    es6模块 (import export)
+    es6和commonjs区别：
+        commonJS输出的是一个值的拷贝，ES6是值的引用
+        commonJs是运行时加载；ES6是编译时加载
+        CommonJS模块的require是同步加载模块；ES6模块的import是异步加载，有独立的模块依赖解析阶段
+        commonJS加载一个对象，对象只有在脚本运行完成时才产生；Es6模块不是对象，对外接口知识一种静态定义，在代码解析阶段就会产生
