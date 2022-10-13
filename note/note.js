@@ -79,6 +79,7 @@ function copyObject(orig) {
 }
 // 节流
 // 限制一个动作在一定时间內只能执行一次
+// n 秒内只运行一次，若在 n 秒内重复触发，只有一次生效
 function throttle(fn,delay){
   let timer=null;
   return function(){
@@ -93,9 +94,7 @@ function throttle(fn,delay){
 //防抖
 // 一个动作连续触发，只执行最后一次
 // 设置一个门槛，表示两次事件的最小间隔时间
-function aaa() {
-  console.log("aaa", new Date());
-}
+// n 秒后在执行该事件，若在 n 秒内被重复触发，则重新计时
 function debounce(fn, delay) {
   let timer = null;
   return function () {
@@ -106,10 +105,6 @@ function debounce(fn, delay) {
       fn.apply(content, argus);
     }, delay);
   };
-}
-let bb = debounce(aaa, 500);
-for (let i = 0; i < 5; i++) {
-  bb();
 }
 // promise + ajax
 let getJson=function(url){
@@ -226,7 +221,7 @@ for(let i=0;i<arr.length-1;i++){
   }
 }
 
-// 快速排序
+// 快速排序 - 递归
 // 数组中选择一个值作为基数，将数组中小值置于该基数之前数组，大于该值置于之后数组
 // 接着对该数前后两个数组进行重复操作直至排序完成
 function quickSort(arr){
@@ -253,4 +248,12 @@ function _new(constructor,...params){
   const obj=Object.create(constructor.protoryte);
   let result=constructor.apply(obj,params);
   return result instanceof constructor?result:obj;
+}
+// 主线程真延时2秒
+console.log(1,new Date());
+delay()
+console.log(2,new Date())
+function delay(){
+    let now = new Date();
+    while(new Date()-now<2000){}
 }

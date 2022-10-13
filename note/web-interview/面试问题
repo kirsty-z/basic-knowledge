@@ -65,8 +65,7 @@ require.js 的核心原理是通过动态创建 script 脚本来异步引入模�
    XSS XSS 攻击指的是跨站脚本攻击，是一种代码注入攻击    存入数据转义  CSP ，CSP 的本质是建立一个白名单
   CSP 指的是内容安全策略，它的本质是建立一个白名单，告诉浏览器哪些外部资源可以加载和执行 HTTP 首部中的
 Content-Security-Policy，
-一种是设置 meta 标签的方式 <meta
-http-equiv="Content-Security-Policy">
+一种是设置 meta 标签的方式 <meta  http-equiv="Content-Security-Policy">
    CSRF 攻击指的是跨站请求伪造攻击  同源检测  CSRF Token 来进行验证 双重 Cookie 验证  设置 cookie 属性的时
 候设置 Samesite
 27.MVC和 MVVM

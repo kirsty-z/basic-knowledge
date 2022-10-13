@@ -1,0 +1,129 @@
+1、盒子模型
+    盒子组成：content+padding+border+margin
+    盒子模型：
+        标准盒子模型：width/height只包含内容，不包含了padding和border
+        怪异盒子模型：width/height包含了padding和border
+    box-sizing：
+        ccontent-box 默认值，元素的 width/height 不包含padding，border，与标准盒子模型表现一致
+        border-box 元素的 width/height 包含 padding，border，与怪异盒子模型表现一致
+        inherit 指定 box-sizing 属性的值，应该从父元素继承
+
+2、选择器，优先级
+    ID选择器
+    类
+    标签
+    后代
+    子代
+    相邻
+    群组
+    伪类
+    优先级：内联>ID>类>标签
+
+3、em px rem vw
+    px:绝对长度单位，像素，页面按精确像素展示
+    em：相对长度单位， 基准点为父元素的字体大小，如果自身设置font-size，按自身来计算，不设置默认（1em=16px）
+    rem:相对长度单位，相对HTML 根元素的font-size的值
+    vw：根据窗口的的宽度，分为100等份，100vw表示满宽
+
+4、css隐藏元素
+    display:none
+    visibility:hidden
+    opacity:0
+
+5、BFC：块级格式化上下文
+
+6、元素水平垂直居中
+    定位+margin：auto
+    定位+margin：负值
+    定位+transform
+    flex布局
+
+7、felxbox
+    flex布局
+    flex-direction:主轴方向
+    flex-wrap：换行
+    justify-content：在主轴对其方式、
+    align-items：交叉轴对齐
+    align-content：定义多根轴线的对其方式
+
+8、css3新增特性
+    css3是css最新标准
+    新增：选择器  新样式 transition过度 transform转换 动画渐变  布局
+
+9、动画有哪些
+      transition 实现渐变动画
+      transform 转变动画（位移 缩放 倾斜 旋转）
+      animation 实现自定义动画
+
+10、重绘和回流
+    回流：布局引擎会根据样式计算每个盒子在页面的大小和位置
+    重绘：当计算好每个盒子的大小和位置及其他属性后，浏览器会根据每个盒子特性进行绘制
+    浏览器优化机制：将修改操作放到一个队列里面，过一段时间或达到一个阈值，才清空队列
+    减少：
+        通过类来改变样式
+        避免设置内联样式
+        应用元素，使用position的fixed|absolute属性（尽可能使元素脱离文档）
+        避免使用css的JavaScript表达式
+
+11、响应设计
+    网络页面设计布局，页面的设计与开发应当根据用户行为以及设备环境进行相应的响应和调整
+    mate属性什么viewport
+    响应式布局：媒体查询  百分比 vw-vh rem
+    优点：面对不同的分辨率设备灵活性强
+          能够快捷解决多设备显示适应问题
+
+12、css性能优化
+    内联首屏关键css
+    异步加载css
+    资源压缩
+    合理使用选择器
+    减少使用昂贵的属性
+    不要使用@import
+    性能方面可以从选择器嵌套、属性特性、减少http这三方面考虑，还要注意css代码的加载顺序
+
+13、单行/多行文本溢出处理
+    单行：text-overflow：ellipsis
+          overflow：hidden
+          white-wrap:nowrap
+    多行：
+        1、高度截断
+          定位+伪元素
+          par{
+            position:relative;
+            height:40px;
+            line-height:20px;
+            overflow:hidden;
+          }
+          son:after{
+            position:absolute;
+            content:"...";
+            bottom:0;
+            right:0;
+            padding:0 20px 0 10px;
+            background:#fff;
+          }
+        2、行数截断
+          -webkit-line-clamp:2;
+          display:-webkit-box;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-wrap: break-word;(很长的英文或数字使用)
+
+14、视觉滚动
+    视觉滚动：指多层背景以不同的速度移动，形成立体的运动，带来非常出色的视觉体验
+    css：background-attachment
+          transform:translate3D;
+
+15、让Chrome支持小于12px的文字
+    zoom：50%/0.5
+    -webkit-transform:scale(0.5)
+
+16、wepack
+    webpack :简化页面依赖的管理，并且通过将其打包为一个文件来降低页面加载时请求的资源数。
+	  四个核心的概念，分别是 Entry（入口）、Output（输出）、loader 和 Plugins（插件）
+    核心特点：一切皆模块  按需加载
+
+
+
+
