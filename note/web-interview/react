@@ -1,0 +1,111 @@
+1、react的新特性
+    react：构建用户界面的JavaScript库，提供UI层面的解决方案
+    jsx语法
+    单向数据流
+    虚拟DOM
+    声明式编程
+    Component
+      可重用，可维护，可组合
+    优势：
+        高效灵活
+        声明式的设计，提高代码复用率
+        单向响应的数据流设计会比双向绑定的更安全，速度更快
+
+2、真实DOM和虚拟DOM有什么区别
+    真实DOM：文档对象模型，在页面渲染出来的每一个节点都是真实DOM
+    虚拟DOM：本质上是JavaScript对象形式存在的DOM描述
+    区别：虚拟DOM不会进行排版和重绘，真实DOM会频繁的进行排版和重绘
+    优缺点：
+      真实DOM：易用
+              效率低：解析速度慢，内存占用量高
+              性能差：频繁操作真实DOM，易于导致重绘与重流
+      虚拟DOM：简单方便
+              性能好
+              跨平台：一套代码，多端运行
+              有些性能要求极高的应用中虚拟DOM无法进行针对性的极致优化
+              首次渲染DOM，由于多一层虚拟DOM，速度比正常稍慢
+
+3、react生命周期有哪些不同阶段
+    创建阶段：
+        constructor：初始化state状态或者this上挂载方法
+        getDerivedStateFromProps：静态方法，组件创建和更新执行，props 和state变化也会更新
+            在每次render调用前，第一个参数为即将更新的props，第二个参数为上一个状态的state，可以比较props和state来加一些限制，防止无用的state更新
+            该方法需要返回一个新的对象作为新的state或者返回null表示state状态不需要更新
+        render：渲染DOM结构
+        componentDidMount：组件挂载到真实DOM后执行，多用于执行一些数据获取，事件监听
+    更新阶段：
+        getDerivedStateFromProps
+        shouldComponentUpdate:告诉组件本身基于当前的state和props是否需要重新渲染组件，默认情况返回true
+        render
+        getSnapshotBeforeUpdate
+            该方法返回的一个Snapshot值，作为componentDidUpdate第三个参数传入
+            目的在于获取组件更新前的一些信息
+        componentDidUpdate：组件跟新后触发
+    卸载阶段：
+        componentWillUnmount：用于组件卸载，清理监听事假，或者取消订阅的网络请求
+
+4、props和state
+    相同：两者都是JavaScript对象
+          两者都是用于保存信息
+          props和state都能触发渲染更新
+    不同：props是外部组件传递给组件的，而state是在组件內被组件自己管理的，一般在constructor中初始化
+          props在组件内饰不可以被修改的，state在组件內可以修改
+          state是多变的，可修改的
+
+5、super 和super（props）
+    react类组件基于es6，在constructor必须使用super
+    在调用super过程，无论是否传入props，react内部都会将props赋值给组件实例props属性中
+    如果只调用super，那么this.props在super()和构造函数结束之间仍是undefined
+
+6、setState
+    修改组件内部state的
+    更新：在生命周期或react合成事件中，setState是异步的
+          在setTimeout或者原生dom事件中，setState是同步的
+
+7、react的事件机制
+    react基于浏览器事件机制自身实现了一套事件机制，包括事件注册，事件合成，事件冒泡，事件派发等，react这套事件机制称为合成事件
+    合成事件是react模拟原生dom事件所有能力的一个事件对象，即浏览器原生事件的跨浏览器包装器
+    总结：react注册的事件都会最终绑定到document这个dom上，而不是react组件对应的dom
+          react通过自身实现了一套冒泡机制，所以evt.stopPropagation无效
+          react通过队列的形式，从触发的组件向父组件回溯，然后调用他们jsx中定义的callback
+          react有一套自己的合成事件
+
+8、react事件绑定的方法有哪些
+    render方法中使用bind
+    render中使用箭头函数
+    constructor中bind
+    定义阶段使用箭头函数绑定
+
+9、react构建组件的方式有哪些
+    函数式构建
+    继承React.component创建
+
+10、组件之间如何通信
+    父组件向子组件传递：数据单向流动，在子组件标签內传递参数
+    子组件向父组件传递：回调函数
+    兄弟组件之间传递：父组件作为中间层来实现数据的互通
+    父组件向后代传递：使用context提供组件之间通讯的一种方式，可以共享数据
+    非关系组件传递：将数据进行一个全局资源管理，例如redux
+    React是单向数据流，主要思想是组件不会改变接收的数据，只会监听数据的变化，
+        当数据发生变化时它们会使用接收到的新值，而不是去修改已有的值
+    ，数据的存储位置都是存放在上级位置中
+    props和callback
+    context
+    redux
+    ref
+
+11、react中的key
+    渲染列表的每一个子元素都应该需要一个唯一的key值
+    良好使用key属性是性能优化的非常关键的一步
+
+12、react refs的理解
+    react refs提供了一种方式，允许我们访问DOM节点或render方法中创建的react元素
+    创建：React.createRef() useRef
+    使用场景：对dom元素的焦点控制，内容选择，控制
+            对dom元素的内容设置及媒体播放
+            对dom元素的操作和对组件实例的操作
+            集成第三方DOM库
+
+13、react中类组件和函数组件
+
+
