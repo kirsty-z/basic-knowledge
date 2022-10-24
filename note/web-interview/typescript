@@ -1,0 +1,125 @@
+1.typescript的理解，与JavaScript区别
+    typescript是JavaScript的类型超集，支持es6语法，支持面向对象编程的概念
+    一种静态类型检查的语言，提供了类型注解，在代码编译阶段就可以检查除数据类型的错误
+    特性：
+          类型批注和编译时类型检查：在编译时批注变量类型
+          类型推断：ts中没有批注变量类型会自动推断变量的类型
+          类型擦除：
+          接口：ts中用接口定义对象类型
+          枚举：用于取值被限定在一定范围內的场景
+          MiXin：可以接受任意类型的值
+          泛型编程：写代码时使用一些以后才指定的类型
+          名字空间：名字只在该区域內有效，其他区域可重复使用该名字而不冲突
+          元组：元组合并了不同类型的对象，相当与一个可以装任何类型数据的数组
+    区别：typescript是JavaScript的超集，扩展了JavaScript的语法
+         typescript可处理已有的JavaScript代码，并只对其中的typescript代码进行编译
+         typescript文件后缀名.ts(.tsx,.ts,.dts);JavaScript文件名后缀名.js
+         在编写typescript文件的时候会自动编译成js文件
+
+2.typescript数据类型
+    number string boolean null undefined array object
+    tuple(元组):允许表示一个已知元素数量和类型的数组，各元素的类型不必相同
+    never:是其他类型 （包括null和 undefined）的子类型，可以赋值给任何类型，代表从不会出现的值
+          never 类型一般用来指定那些总是会抛出异常、无限循环
+    enum（枚举） :为一组数值赋予友好的名字
+    any:可以指定任意类型
+    void:用于标识方法返回值的类型，表示该方法没有返回值
+
+3.typescript中枚举类型
+    枚举是一个被命名的整型常数的集合，声明一组命名的常数；当一个变量有几种可能的取值时,可以将它定义为枚举类型
+    枚举就是一个对象的所有可能取值的集合
+    enum xxx{....}
+    后端返回的字段使用 0 - 6 标记对应的日期，这时候就可以使用枚举可提高代码可读性
+    enum Days{Sun,Mon,Tue,Wen,Thu,Fri,Sat}
+    后端日常放回0和1等等状态时，我们可以通过枚举去定义，可以提高代码的可读写，便于后续维护
+
+4.typescript中接口的理解
+    一个接口所描述的是一个对象相关的属性和方法，但并不提供具体创建此对象实例的方法
+    接口定义：interface xxx{}
+    接口也可以继承
+        interface Son extends Father,Mother{
+            name: string
+            age: Number
+        }
+    使用接口定义参数变量
+
+5.typescript中函数的理解
+    函数是JavaScript应用程序的基础，帮助我们实现抽象层，模拟层，信息隐藏和模块
+    在typescript中，虽然已经支持类、命名空间和模块，但函数任然是只要定义行为的方式
+    使用：通过funciton 关键字、箭头函数等形式去定义
+    区别：typescript声明函数需要定义参数的类型或者声明返回值的类型
+          typescript参数中，添加可选参数供使用者选择
+          typescript增加函数重载功能，使用者只需查看函数声明的方式，即可知道函数传递参数的个数和类型
+
+6.typescript泛型的理解
+    泛型允许我们在强类型程序设计语言中编写代码时使用一些以后才指定的类型
+    例如：我们用一个函数，接受一个number类型的参数，并放回一个number参数
+        function returnItem (para: number): number {
+              return para
+          }
+        上述代码重复度比较高
+        function returnItem<T>(para: T): T {
+            return para
+        }
+        泛型给予开发者创造灵活、可重用代码的能力
+    泛型通过<>的形式进行表述，可以声明：
+        函数
+        接口
+        类
+      泛型的索引类型和约束类型
+      function Exapmle<T extends object,U extends keyof T>(obj:T,key:U){
+        return obj[key]
+      }
+      索引类型 keyof T 把传入的对象的属性类型取出生成一个联合类型，这里的泛型 U 被约束在这个联合类型中
+    在编写typescript的时候，定义函数、接口或者类的时候，不预先定义好具体的类型，而在使用时指定类型的一种特性的时候，使用泛型
+
+7.typescript高级类型
+    交叉类型：T & U；通过 & 将多个类型合并为一个类型
+    联合类型：T | U其类型为连接的多个类型中的任意一个
+    类型别名：type some = boolean | string
+        interface 只能用于定义对象类型
+        type 除了声明对象之外，还可以定义交叉、联合、原始类型等，类型声明的方式适用范围显然更加广泛
+    类型索引：keyof
+        interface Button {
+            type: string
+            text: string
+        }
+        type ButtonKeys = keyof Button
+    类型约束：通过关键字 extend 进行约束；泛型内使用的主要作用是对泛型加以约束
+        type BaseType="string"|"number"
+        <T extends BaseType,U extends keyof T>
+        类型约束通常和类型索引一起使用
+    映射类型:通过 in 关键字做类型的映射，遍历已有接口的 key 或者是遍历联合类型
+        type Readonly<T> = {
+            readonly [P in keyof T]: T[P];
+        };
+    条件类型:件类型的语法规则和三元表达式一致，经常用于一些类型不确定的情况
+        T extends U ? X : Y
+
+8.typescript中装饰器
+    装饰器是一种特殊类型的声明，它能够附加到类声明，方法，访问符，属性或者参数上
+    一个普通的函数，@expression 的形式其实是Object.defineProperty的语法糖
+    expression求值后必须是一个函数，他会在运行时被调用，被装饰的声明信息作为参数传入
+    装饰器存在两个显著的优点：
+      代码可读性变强了，装饰器命名相当于一个注释
+      在不改变原有代码情况下，对原来功能进行扩展
+
+9.typescript命名空间和模块的理解
+    任何包含顶级 import 或者 export 的文件都被当成一个模块
+    命名空间一个最明确的目的就是解决重名问题
+        使用 namespace 来定义
+        namespace SomeNameSpaceName {
+          export interface ISomeInterfaceName {      }
+          export class SomeClassName {      }
+        }
+    区别：命名空间位于全局命名空间下的一个普通带有名字的JavaScript对象，使用十分容易；但就像其他全局命名空间污染一样，
+          他很难识别组件之间的依赖，
+        模块可以包含代码和声明，不同的模块可以声明它的依赖
+        ts项目开发中不建议使用
+
+10.typescript中函数的理解
+    typescript声明函数需要定义参数的类型和声明返回值的类型
+    typescript在参数值，添加可选参数供使用者选择
+    typescript添加函数重载功能，使用者只需通过查看函数声明的方式，就能知道函数的参数个数以及类型
+
+
