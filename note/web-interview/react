@@ -107,5 +107,222 @@
             集成第三方DOM库
 
 13、react中类组件和函数组件
+    类组件：通过es6类的编码方式去编写组件，该类必须继承React.Component
+    函数组件：通过函数编写的形式去实现一个react组件
+    函数组件语法更短，跟简单，这是他容易开发、理解和测试
+    而类组件也因大量使用this而让人感到困惑
 
+14、受控组件和非受控组件
+    受控组件：受我们控制的组件，组件的状态全程响应外部数据
+    非受控组件：不受我们控制的数据
 
+15、高阶组件
+    高阶组件至少满足一下一个条件：
+      接受一个函数或者多个函数作为输入
+      输出一个函数
+    使用高阶组件，遵循的约定：
+      props保持一致
+      不能在函数式组件上使用ref属性，因为他没有实例
+      不要以任何方式改变原始组件
+      不要再render方法中使用高阶组件
+      使用compose组合高阶组件
+      包装显示名字以便于调试
+    权限控制、日志记录、数据校验、异常处理、统计上报等
+
+16、react的hook
+    hook是react16.8的新增特性，可以在不编写class的情况下使用state以及其他react特性
+
+17、react 中引入css的方法
+    在组件內直接使用
+    组件中引入.css文件 ：样式全局生效
+    组件中引入.module.css文件：将css作为一个模块引入，模块中的所有css，只作用于当前组件
+    css in js：由第三方库提供
+
+19、react中间过度动画如何实现
+    react-transition-group，react-motion，Animated，以及原生的CSS都能完成切换动画
+    react-transition-group:组件的入场离场主要三个组件
+        CSSTransition：在前端开发中，结合 CSS 来完成过渡动画效果
+        SwitchTransition：两个组件显示和隐藏切换时，使用该组件
+        TransitionGroup：将多个动画组件包裹在其中，一般用于列表中元素的动画
+
+20、redux
+    将所有状态进行集中管理，当需要更新状况的时候，仅需要对这个管理集中处理
+    redux就是集中管理容器，遵循三大基本原则：
+        单一数据源
+        state只读
+        使用纯函数来执行修改
+    工作原理：
+        redux要求把数据都放在store公共存储空间
+        一个组件改变了store里的数据内容，其他组件就能感知store变化，再来取数据，从而间接实现了这些数据传递的功能
+        store是图书馆---reducer是记录本----state是数据信息
+    使用：
+        1.创建一个store公共数据区域
+        2.创建reducer管理数据，接受两个参数（state，action），返回state
+        3.把reducer传递给store，建立连接
+        4.获取数据
+        5.更改数据
+        6.通过store.subscribe监听store变化
+        const redux = require('redux');
+        const initialState={
+          counter:0
+        }
+        ##创建reducer
+        const reducer = (state=initialState,action)=>{
+          switch(action.type){
+            case "INCREMENT":
+              return {...state,counter:state.counter+1};
+            case "DECREMENT":
+              return {...state, counter: state.counter - 1};
+            case "ADD_NUMBER":
+              return {...state, counter: state.counter + action.number}
+            default:
+              return state;
+          }
+        }
+        ##根据reducer创建store
+        const store=redux.createStore(reducer);
+        store.subscribe(()=>{
+          console.log(store.getState())
+        })
+        ##修改store中的state
+        store.dispatch({
+          type: "INCREMENT"
+        })
+        store.dispatch({
+          type: "ADD_NUMBER",
+          number: 5
+        })
+    小结：
+        createStore可以帮助创建store
+        store.dispatch帮助派发action，action会传递给store
+        store.getState可以获取store里边所有的数据内容
+        store.subscribe订阅store的改变，只要store发送变化，store.subscribe这个函数接收的这个回调函数就会被执行
+
+21、redux中间件的理解，常用中间件有哪些
+    中间件：介于应用系统和系统软件之间的一类软件，达到资源共享，功能共享的目的
+    在redux中：中间件就放在dispatch过程，在分发action进行拦截处理
+    常用的中间件：
+        redux-thunk：用于异步操作
+        redux-logger：用于日志记录
+        上述中间件都需要通过applyMiddlewares进行注册，作用是将所有中间件组成一个数组，依次执行，然后作为第二个参数传入createStore中
+            const store = redux.createStore(reducer,applyMiddlewares(thunk,logger));
+
+22、项目中如何使用redux
+    react-redux分为:容器组件和UI组件
+    两大核心：Provider 和connection
+        Provider将store放在顶层元素中，所有组件都收redux控制，都能获取redux数据
+            <Provider store={store}>
+              <App/>
+            </Provider>
+        connection:connect方法将store上的getState 和 dispatch 包装成组件的props
+
+23、react router，常用router
+    react-router：无刷新的条件下切换显示不同的页面
+    路由的本质就是页面URL发生改变时，页面的显示结果可以根据URL的变化而变化，当时页面不会刷新
+    react-router分成不同的包：
+        react-router：实现了路由的核心功能
+        react-router-dom：基于react-router，加入浏览器运行环境下的一些功能
+        react-router-native：基于react-router，加入react-native运行环境下的一些功能
+        react-router-config：用于配置静态路由的工具库
+    常用组件：react-router-dom的API
+        BrowserRouter、HashRouter
+            BrowserRouter是hsitory模式；使用两者作为最顶层组件包裹其他组件
+        Route
+          用于路径的匹配，然后进行组件的渲染；属性path component render exact
+        Link、NavLink
+          Link:路径的跳转，相当于a标签，to相当于href
+          NavLink是在Link基础之上增加了一些样式属性；activeStyle（匹配时样式），activeClassName（匹配时添加的class）
+        switch
+          适用于当匹配到第一个组件的时候，就不应该继续匹配
+        redirect
+          重定向
+    hook：
+        useHistory：可以让组件内部直接访问history
+        useLocation：返回当前url的location对象
+        useParmas：放回参数
+    参数传递：
+        动态路由方式： url中 :id  /abc  /123
+        search传递参数：url中？后面的参数
+        to传入对象:
+          <NavLink to={{
+              pathname: "/detail2",
+              query: {name: "kobe", age: 30},
+              state: {height: 1.98, address: "洛杉矶"},
+              search: "?apikey=123"
+          }}>详情</NavLink>
+
+24、react router有几种模式
+    单页面应用：一个web项目只有一个html页面，一旦页面加载完成后，就不用因为用户的操作而进行页面的加载或者跳转
+    特性：改变url且不用浏览器向服务器发送请求
+        在不刷新页面的前提下改变浏览器地址栏中的url地址
+    模式： hash模式：在url后面加上#
+            对应组件：HashRouter
+          history模式
+            对应组件BrowserRouter
+
+25、Immutable
+    不可更改，一旦创建，就不能再被更改的数据
+
+26、render方法的原理
+    类组件，指的是render方法
+    函数组件，指的是函数本身
+    触发事件：类组件调用setState、类组件重新渲染一定会触发，函数组件使用useState更改状态不一定会触发
+
+27、react diff原理
+    diff算法就是通过对比新旧virtual DOM 来找出真实DOM变化之处
+    遵循三个层级的策略：
+      tree层级：创建和删除
+      component层级：创建和删除
+      element层级：创建和删除和移动
+
+28、react jsx 转为真实DOM过程
+    jsx通过babel最终转换为React.createElement这种形式
+    babel编译时判断jsx中组件的首字母：
+        首字母小写：认定为原生DOM
+        首字母大写：认定为组件
+    节点：原生标签节点 文本节点  函数组件 类组件
+    渲染流程：
+        将jsx转换为React.createElement(...),babel帮助完成转换
+        createElement对key和ref等特殊的props进行处理，并获取defaultProps对默认props赋值，并对传入的子节点进行处理，最终构造一个虚拟对象
+        ReactDOM.render将生成好的虚拟对象渲染到指定容器上，最终转化为真实DOM
+
+29、react性能优化
+    避免使用内联函数
+    使用react fragements避免额外的标记 <></>
+    使用Immutable：减少渲染次数；
+        在shouldComponentUpdate()中做对比，当返回true执行render方法；Immutable通过is方法则可以完成对比
+    懒加载组件
+    事件绑定方式
+    服务端渲染
+    组件拆分、合理使用hooks
+
+30、react如何捕获错误
+    错误边界：捕获发生在其子组件树任何位置的 JavaScript 错误，并打印这些错误，同时展示降级 UI，而并不会渲染那些发生崩溃的子组件树
+    形成错误边界的两个条件：
+        使用了static getDerivedStateFromError()
+        使用了componentDIdCatch()
+    无法捕捉：
+        事件处理
+        异步代码
+        服务端渲染
+        自身抛出的错误
+    除此之外：可以监听onerror事件
+        window.addEventListener("onerror",function(event){})
+
+31、服务端渲染
+    SSR：服务端渲染
+    解决问题：SEO，由于搜索引擎爬虫抓取工具可以查看完全渲染的页面
+            加速首屏加载，解决首屏白屏的问题
+    原理：服务器运行react代码生成HTML-->发送HTML给浏览器-->浏览器接收内容并显示->>浏览器加载js文件->js代码执行并接管页面的操作
+
+32、Fiber架构
+    JavaScript引擎和渲染引擎是互斥的，一个线程执行时，另一个只能挂起等待
+    架构角度：Fiber是对react核心算法的重新
+    编程角度：Fiber是react内部定义的一种数据结构，他是Fiber树结构的节点单位，也是react 16新架构下的虚拟dom
+    主要操作：为每个增加优先级
+            增加异步任务
+            dom diff树变为了链表
+    Fiber把渲染更新过程拆分成多个子任务，每次只做一小部分，做完看是否还有剩余时间，如果有继续下一个任务；如果没有，挂起当前任务，将时间控制权交给主线程，等主线程不忙的时候继续执行
+
+33、react中遇到的问题
+    https://github.com/febobo/web-interview/issues/218
