@@ -1012,6 +1012,13 @@
           // JSONP只支持GET请求，CORS 支持所有类型的 HTTP 请求
           // JSONP 的优势在于支持老式浏览器，以及可以向不支持 CORS 的网站请求数据
 
+    // 跨域问题总结
+        // jsonp（只支持get请求，支持老的IE浏览器）适合加载不同域名的js、css，img等静态资源；
+        // CORS（支持所有类型的HTTP请求，但浏览器IE10以下不支持）适合做ajax各种跨域请求；
+        // Nginx代理跨域和nodejs中间件跨域原理都相似，都是搭建一个服务器，直接在服务器端请求HTTP接口，这适合前后端分离的前端项目调后端接口。
+        // document.domain+iframe适合主域名相同，子域名不同的跨域请求。
+        // postMessage、websocket都是HTML5新特性，兼容性不是很好，只适用于主流浏览器和IE10+
+
   // Storage接口
       // 概述
           // Storage接口用于在浏览器保存数据

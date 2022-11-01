@@ -434,3 +434,172 @@
               // then是本轮事件循环执行，setTimeout在下一轮事件循环开始执行
 
 }
+
+// Axios
+{
+  //1. Axios
+    // 基于promise网络请求库，作用域node.js和浏览器中；在服务端使用原生node.js HTTP模块，在客户端使用XMLHttpRequest
+
+  // 2.特性
+    // 从浏览器创建XMLHttpRequest
+    // 从node.js创建HTTP请求
+    // 支持promise api
+    // 拦截请求和响应
+    // 转换请求和响应
+    // 取消请求
+    // 自动转换json数据
+    // 客户端支持防御XSRF
+
+  // 3.安装
+    // yarn add axios
+
+  // 4.基本用例
+    const axios = require('axios');
+    // get
+      axios.get('/user?ID=12345')
+      .then()
+      .catch()
+    // 使用params传递参数
+        axios.get('/user', {
+          params: {
+            ID: 12345
+          }
+        })
+        .then()
+        .catch()
+    // 发起一个post请求
+      axios({
+        method: 'post',
+        url: '/user/12345',
+        data: {
+          firstName: 'Fred',
+          lastName: 'Flintstone'
+        }
+      });
+    // 发起一个get请求
+      axios({
+        method: 'get',
+        url: 'http://bit.ly/2mTM3nY',
+        responseType: 'stream'
+      })
+        .then();
+    // 其别名方法
+      // axios.request(config)
+      // axios.get(url[, config])
+      // axios.delete(url[, config])
+      // axios.head(url[, config])
+      // axios.options(url[, config])
+      // axios.post(url[, data[, config]])
+      // axios.put(url[, data[, config]])
+      // axios.patch(url[, data[, config]])
+      // 使用别名方法，url，method，data都不需要在配置中指定
+
+  // 5.配置
+      // url:请求的服务器URL
+      // method：使用的方法，默认get
+      // baseURL：设置一个baseURL，便于为axios实例的方法传递相URL
+      // timeout:请求时间超过timeout，则请求会被中断
+      // proxy：代理服务器的主机名，端口和协议
+      // ....
+
+  // 6.默认配置
+      // 全局axios默认值
+        // axios.defaults.baseURL = 'https://api.example.com';
+        // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+        // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+      // 自定义实例默认值\
+        // 创建实例配置默认值
+        const instance = axios.create({
+          baseURL:"https://api.example.com"
+        })
+        // 创建实例后修改默认值
+        instance.default.headers.common["Authorization"]=AUTH_TOKEN
+      // 配置优先级
+        // 配置将会按优先级合并
+        // 的顺序是：在lib/defaults.js中找到的库默认值，然后是实例的 defaults 属性，最后是请求的 config 参数
+      // 拦截器
+        // 在请求或响应被then或者catch处理前拦截他们
+        const myInterceptor=axios.interceptors.request.use(function(config){},function(error){})
+        axios.interceptors.reponse.use(function(config){},function(error){})
+        // 移除拦截器
+        axios.interceptors.request.eject(myInterceptor);
+      // 错误处理
+        axios.get("/use/123").catch(error=>{
+          if(error.request){
+              // 请求已经成功发起，但没有收到响应
+          }
+          else if(error.reponse){
+             // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+          }
+          else{
+            // 发送请求时出了点问题
+          }
+        })
+        // 使用 validateStatus 配置选项，可以自定义抛出错误的 HTTP code。
+        axios.get('/user/12345', {
+          validateStatus: function (status) {
+            return status < 500; // 处理状态码小于500的情况
+          }
+        })
+    // 取消请求
+        // AboutController
+        // CancelToken
+    // 请求体编码
+        // 默认情况下axios将JavaScript对象序列化为JSON；
+          // 要以application/x-www-form-urlencoded格式发送数据
+        // 浏览器中：URLSearchParams API
+            const params = new URLSearchParams();
+            params.appen("param1","value1");
+            params.appen("param2","value2");
+            axios.post("/foo",params)
+        // 可以使用qs库
+            const qs = require('qs');
+            axios.post('/foo', qs.stringify({ 'bar': 123 }));
+        // es6
+            /*import qs from 'qs';
+            let data={"bar":123}
+            option={
+              url,
+              method:"POST",
+              data: qs.stringify(data)
+            }
+            axios(option)
+            */
+        // node.js
+            // Query string
+            // Form data
+}
+// AJAX，axios ，fetch
+{
+  // AJAX：异步JavaScript和XML
+      // AJAX是一个技术统称，是一个概念模型，囊括了很多技术，最重要的一个特性之一就是让页面实现局部刷新
+  // XMLHttpRequest模块只是实现AJAX的一种方式
+      // 如果我们使用XMLHttpRequest实现网络请求，如果请求内部又包含请求，以此循环，就会出现回调地狱
+      // 我们通常所说的 Ajax 是指使用 XMLHttpRequest 实现的 Ajax
+  // Fetch，es6出现的，它使用了Promise对象；他是XMLHttpRequest的替代品
+      // Fetch是一个API，他是真实存在的，他是基于Promise的
+      // 特点:
+          // 使用promise，不使用回调函数
+          // 采用模块化设计，比如rep，res等对象分散开来，比较友好
+          // 通过数据流对象处理数据，可以提高网站性能
+          fetch(url).then(res => res.json()).then(data => {
+            console.info(data)
+          })
+      // 最重要的特点之一就是采用了.then 链式调用的方式处理结果，这样不仅利于代码的可读，而且也解决了回调地狱的问题
+  // Axios：基于Promise封装的网络请求库，他是基于XHR的二次封装
+      // 从浏览器创建XMLHttpRequest
+      // 从node.js创建http请求
+      // 支持Promise API
+      // 拦截请求和响应
+      // 转换请求数据和响应数据
+      // 取消请求
+      // 自动转换为json数据
+      // 客户端支持防御XSRF
+          // 访问页面，服务端通过set-cookie，添加一个token
+          // 客户端发送请求，从cookie中读取token，添加到请求header中
+          // 服务端从header中读取token并验证，token很难伪造，能区分是否是用户正常发起的
+  // $.ajax：是JQuery封装的基于XMLHttpRequest的一个方法，适合mvc模式，不适合目前mvvm模式，使用时引入jQuery庞大的库
+  // Axios是XHR一个子集，XHR是AJAX一个子集
+  // XMLHttpRequest模块是实现AJAX的一个方法
+  // Fetch API是实现AJAX的另一个方法
+}

@@ -362,8 +362,8 @@
                             )
                       }
                     }
+                    return to;
                   }
-                  return to;
 
             // 控制对象：冻结对象读写状态 preventExtensions,seal freeze(越来越强↓)
                   // Object.preventExtensions():使一个对象无法添加新的属性
