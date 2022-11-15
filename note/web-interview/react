@@ -239,7 +239,7 @@
     hook：
         useHistory：可以让组件内部直接访问history
         useLocation：返回当前url的location对象
-        useParmas：放回参数
+        useParams：放回参数
     参数传递：
         动态路由方式： url中 :id  /abc  /123
         search传递参数：url中？后面的参数
@@ -274,6 +274,7 @@
       tree层级：创建和删除
       component层级：创建和删除
       element层级：创建和删除和移动
+    传统diff，遍历整个树进行比较，react diff：同层比较
 
 28、react jsx 转为真实DOM过程
     jsx通过babel最终转换为React.createElement这种形式
@@ -326,3 +327,11 @@
 
 33、react中遇到的问题
     https://github.com/febobo/web-interview/issues/218
+
+34、懒加载和异步加载
+import("模块或者数据路劲").then(bundle=>{})
+
+const LazyComponent=React.lazy(()=>import("模块或者路径"))
+<React.Suspense fallback={<h1>loadding...</h1>}>
+    <LazyComponent/>
+</React.Suspense>

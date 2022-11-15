@@ -552,7 +552,7 @@
             params.appen("param1","value1");
             params.appen("param2","value2");
             axios.post("/foo",params)
-        // 可以使用qs库
+        // 可以使用qs库：查询参数序列化和解析库
             const qs = require('qs');
             axios.post('/foo', qs.stringify({ 'bar': 123 }));
         // es6
@@ -573,11 +573,13 @@
 {
   // AJAX：异步JavaScript和XML
       // AJAX是一个技术统称，是一个概念模型，囊括了很多技术，最重要的一个特性之一就是让页面实现局部刷新
+      // ajax工作原理：通过XMLHttpRequest向服务器发送异步请求，从服务器获得数据，使用js来操作dom而更新页面
   // XMLHttpRequest模块只是实现AJAX的一种方式
       // 如果我们使用XMLHttpRequest实现网络请求，如果请求内部又包含请求，以此循环，就会出现回调地狱
       // 我们通常所说的 Ajax 是指使用 XMLHttpRequest 实现的 Ajax
   // Fetch，es6出现的，它使用了Promise对象；他是XMLHttpRequest的替代品
       // Fetch是一个API，他是真实存在的，他是基于Promise的
+      // AboutController
       // 特点:
           // 使用promise，不使用回调函数
           // 采用模块化设计，比如rep，res等对象分散开来，比较友好

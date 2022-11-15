@@ -475,7 +475,26 @@
 
       console.log("应用实例，访问地址为 http://%s:%s", host, port)
       })
+    // 特征：
+        // 1.以资源为基础
+        // 2.统一接口
+        // 3.url指向资源
+        // 4.无状态
+    // REST架构限制条件：
+        // 1.客户端-服务器
+        // 2.无状态
+        // 3.可缓存性
+        // 4.统一接口
+        // 5.分层系统
+        // 6.按需代码
+    // RESTful API 设计规范
+        // 1.url设计规范：协议 域名 端口号 路劲 查询字符串 锚点
+        // 2.HTTP动词：get post put  delete
+        // 3.状态码和返回数据：json格式
+
+
 }
+
 // 17.多进程
 {
   // 1.概述
@@ -511,7 +530,7 @@
 {
   // 1.概述
       // 使用到的 Websites 表 SQL 文件：websites.sql
-  // 2.安装(ubontu)
+  // 2.安装(ubuntu)
       // sudo apt install mysql-server
       // sudo mysql
       // mysql>
