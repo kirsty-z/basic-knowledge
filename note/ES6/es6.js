@@ -199,6 +199,8 @@
         // 注意：如果作为参数的Promise实例，自己定义了catch，那么一旦被rejected，并不会触发Promise.all()的catch方法
         // 只适合所有异步操作都成功的情况，如果有一个操作失败，就无法满足要求
 
+    // Promise.allSettled([p1,p2,p3]):当Promise全部处理完成后我们可以拿到每个Promise的状态, 而不管其是否处理成功
+
     // Promise.race()：
           // const p = Promise.race([p1, p2, p3]);
         // 只要p1、p2、p3之中有一个实例率先改变状态，p的状态就跟着改变

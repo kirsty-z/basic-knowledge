@@ -79,6 +79,7 @@
               // new命令简化的内部流程
                   function _new(/* 构造函数 */ constructor, /* 构造函数参数 */ params) {
                     // 将 arguments 对象转为数组
+                    // arguments类似数组对象，对应传递给函数的参数
                     var args = [].slice.call(arguments);
                     // 取出构造函数
                     var constructor = args.shift();

@@ -86,6 +86,9 @@
             事件捕获阶段：事件从document到目标元素，检测是否有监听事件，有，立马执行
             事件处理阶段：事件到达目标元素，触发目标元素监听函数
             事件冒泡阶段：事件从目标元素冒泡到document，检测经过的节点是否有监听事件，有立马执行
+        当浏览器载入 HTML 文档, 它就会成为 Document 对象
+        Document 对象是 HTML 文档的根节点
+        Document 对象是 Window 对象的一部分，可通过 window.document 属性对其进行访问
 
 14、typeof intanceof
     typeof:返回一个变量的基本类型
@@ -233,3 +236,7 @@
                 CSRF token
                 双重cookie验证
 
+29、DOM BOM
+    JavaScript由三部分组成：ECMAScript  BOM DOM
+    BOM是浏览器对象模型：描述了与浏览器交互的方法和接口；根本对象是window ，BOM没有标准
+    DOM是文档对象模型：描述了处理网页内容的方法和接口；根部对象是document（实际是window.document）DOM是w3c标准

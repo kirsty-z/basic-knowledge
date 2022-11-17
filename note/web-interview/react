@@ -250,6 +250,22 @@
               state: {height: 1.98, address: "洛杉矶"},
               search: "?apikey=123"
           }}>详情</NavLink>
+    v5与v6
+    1.Routes替换了switch
+    2.跳转：Link，useNavigate跳转
+    3.v6移除了Redirect组件，改用Navigate组件：重定向
+    4.嵌套路由与动态路由
+        嵌套路由的 path 可以不用写父级，会直接拼接；
+        动态路由通过 :style 的形式实现；
+        由于 /goods/list 的匹配度大于 /goods/* ，所以输入精确地址，会精确匹配，而不是匹配到动态路由；
+        嵌套路由必须在父级追加 Outlet 组件，作为子级组件的占位符，类似于 vue-router 中的 router-view
+    5.获取路由的参数
+        useParams：获得动态路由的值
+        useSearchParams获取查询字符串的值
+    6.默认路由
+        当页面有多个子路由，比如在 /goods 时，页面展示 商品列表； /goods/:id时，展示某个商品的详情
+    7.通过配置实现路由管理
+        useRoutes 可以将数组对象形式的路由，直接在页面上使用。
 
 24、react router有几种模式
     单页面应用：一个web项目只有一个html页面，一旦页面加载完成后，就不用因为用户的操作而进行页面的加载或者跳转
@@ -329,9 +345,55 @@
     https://github.com/febobo/web-interview/issues/218
 
 34、懒加载和异步加载
-import("模块或者数据路劲").then(bundle=>{})
+    import("模块或者数据路劲").then(bundle=>{})
 
-const LazyComponent=React.lazy(()=>import("模块或者路径"))
-<React.Suspense fallback={<h1>loadding...</h1>}>
-    <LazyComponent/>
-</React.Suspense>
+    const LazyComponent=React.lazy(()=>import("模块或者路径"))
+    <React.Suspense fallback={<h1>loadding...</h1>}>
+        <LazyComponent/>
+    </React.Suspense>
+    封装lazyload
+        const lazyLoad = (moduleName: string) => {
+        const Module = lazy(() => import(`views/${moduleName}`));
+        return <Module />;
+        };
+        lazyLoad("login")
+
+35、react和vue的区别
+    相同：
+        数据驱动视图
+        组件化
+        都使用了 Virtual DOM + Diff算法
+    不同：
+        核心思想：vue降低前端开发门槛，让更多人能更快的上手；特定：灵活易用的渐进式框架，进行数据拦截/代理，侦测数据变化更敏感，更精确
+                react定位UI开发的新思路，推崇函数式编程，数据不可变以及单向数据流
+        响应式原理不同：vue依赖收集，自动优化，数据可变
+                    react基于状态机，手动优化，数据不可变需要setState驱动新的state替换老的state；。当数据改变时，以组件为根目录，默认全部重新渲染, 所以 React 中会需要 shouldComponentUpdate 这个生命周期函数方法来进行控制
+
+        组件写法差异：vue：template简单文件组件格式，即HTML css js写在一个文件
+                    react：jsx+inline style ，HTML和css写在js中，
+        diff算法不同：vue对比节点，当节点元素相同，classnames不同时，认为是不同类型元素，删除重建
+                    react认为是同类型节点，只修改节点属性
+                    vue对比列表，采用两端到中间对比方式
+                    react采用的是从左到右依次对比的方式，当集合只是把最后一个节点移到第一个，react把前面的节点依次移动，而vue只是把最后一个移到第一个，vue的方式比较高效
+        渲染过程：Vue可以更快地计算出Virtual DOM的差异，这是由于它在渲染过程中，会跟踪每一个组件的依赖关系，不需要重新渲染整个组件树
+                React在应用的状态被改变时，全部子组件都会重新渲染。通过shouldComponentUpdate这个生命周期方法可以进行控制，但Vue将此视为默认的优化
+        vue和redux
+            Redux使用的是不可变数据，
+            而Vuex的数据是可变的，因此，Redux每次都是用新state替换旧state，而Vuex是直接修改
+            React更偏向于构建稳定大型的应用，非常的科班化。相比之下，Vue更偏向于简单迅速的解决问题，更灵活，不那么严格遵循条条框框。因此也会给人一种大型项目用React，小型项目用Vue的感觉。
+        框架：Vue本质是MVVM框架，由MVC发展而来；
+             React是前端组件化框架，由后端组件化发展而来。
+        路由：
+        循环：vue循环dom是在html里面使用v-if指令来进行循环，react是使用{数组.map((循环出来的数据,下表)=>{})}来进行循环的
+        解决跨域的区别：vue是写在vue.config.js里面，react可以写在package.json里也可以写在src文件夹下的setupProxy.js里
+        vue：
+            最新文档和更简单的语法。
+            更小，更快，更灵活。
+            需要丰富的HTML模板，易于开发。
+        react：
+            需要构建移动应用程序。
+            需要构建大型应用程序。
+            轻量级，易于版本迁移。
+
+        如果想要一个轻量级，更快速，更现代的UI库来制作单页面应用程序应该选择Vue.js，
+        如果是大规模应用程序和移动应用程序的应该选择React。
