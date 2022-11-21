@@ -397,3 +397,40 @@
 
         如果想要一个轻量级，更快速，更现代的UI库来制作单页面应用程序应该选择Vue.js，
         如果是大规模应用程序和移动应用程序的应该选择React。
+
+36.hooks:
+    1.useEffect 和 useLayoutEffect
+        useEffect执行是异步的，useLayoutEffect是同步的
+        函数组件渲染时：useEffect
+            1.触发组件重新渲染（state改变或者父组件重新渲染，导致子节点渲染）
+            2.组件函数执行
+            3.组件渲染后呈现到屏幕上
+            4.useEffect hook执行
+          useLayoutEffect：
+            1.触发组件重新渲染（state改变或者父组件重新渲染，导致子节点渲染）
+            2.组件函数执行
+            3.useLayoutEffect hook执行
+            4.组件渲染后呈现到屏幕上
+            useEffect(() => {
+                if (value === 0) {
+                    setValue(10 + Math.random() * 200);
+                }
+            }, [value]);
+            console.log("render", value);
+            return (
+                <div onClick={() => setValue(0)}>
+                    value: {value}
+                </div>
+            );
+            //useEffect出现闪烁，useLayoutEffect不会
+
+    2.useRef
+        可保存任何可变值，类似class中使用实例字段的方式
+        变更 .current 属性不会引发组件重新渲染
+        createRef 每次渲染都会返回一个新的引用，而 useRef 每次都会返回相同的引用
+
+    3.useCallback和useMemo
+        相同：依赖数据 发生变化, 才会重新计算结果，也就是起到缓存的作用
+        区别：useMemo计算结果是return返回的值，主要用于缓存计算结果的值
+             useCallback计算结果是函数，主要用户函数缓存，函数式组件每次任何一个 state 的变化 整个组件 都会被重新刷新，
+                一些函数是没有必要被重新刷新的，此时就应该缓存起来，提高性能，和减少资源浪费
