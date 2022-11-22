@@ -219,6 +219,9 @@
         // async函数的await命令后面，可以是 Promise 对象和原始类型的值
     // 返回值是Promise
         // async函数的返回值是 Promise 对象；可以用then指定下一步操作
+    // async 用于申明一个 function 是异步的，而 await 用于等待一个异步方法执行完成
+    // await 只能出现在 async 函数中
+    //  async 会将其后的函数的返回值封装成一个 Promise 对象，而 await 会等待这个 Promise 完成，并将其 resolve 的结果返回出来
 
 // Class基本语法
     // 类的由来
