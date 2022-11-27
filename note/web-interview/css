@@ -9,14 +9,14 @@
         inherit 指定 box-sizing 属性的值，应该从父元素继承
 
 2、选择器，优先级
-    ID选择器
-    类
-    标签
-    后代
-    子代
-    相邻
-    群组
-    伪类
+    ID选择器 #id
+    类 .class
+    标签 div
+    后代 a b{}
+    子代 a>b{}
+    相邻a+b{}
+    群组 a~b{}
+    伪类 :active
     优先级：内联>ID>类>标签
 
 3、em px rem vw

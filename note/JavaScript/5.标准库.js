@@ -34,7 +34,7 @@
                 isObject(false);//false
 
       // Object构造函数
-          var obj = new OBject();
+          var obj = new Object();
           var obj= {};//等价
 
       // Object静态方法：自身的方法

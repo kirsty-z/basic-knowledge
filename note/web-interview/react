@@ -432,12 +432,27 @@
         可保存任何可变值，类似class中使用实例字段的方式
         变更 .current 属性不会引发组件重新渲染
         createRef 每次渲染都会返回一个新的引用，而 useRef 每次都会返回相同的引用
+        父组件对子组件dom操作时，子组件使用React.forwardRef(childComponent)
+        父组件使用子组件方法，字符集使用React.forwardRef(childComponent)，使用useImperativeHandle把方法暴露出去
+
+
 
     3.useCallback和useMemo
         相同：依赖数据 发生变化, 才会重新计算结果，也就是起到缓存的作用
         区别：useMemo计算结果是return返回的值，主要用于缓存计算结果的值
              useCallback计算结果是函数，主要用户函数缓存，函数式组件每次任何一个 state 的变化 整个组件 都会被重新刷新，
                 一些函数是没有必要被重新刷新的，此时就应该缓存起来，提高性能，和减少资源浪费
+        使用useCallback依赖改变才会重新渲染子组件，子组件使用memo包裹，能做到根据依赖渲染
+            https://www.jianshu.com/p/f423b1401020
+
+        useMemo和useCallback的共同点：
+        接收的参数都是一样的，第一个是回调函数，第二个是依赖的数据
+        它们都是当依赖的数据发生变化时才会重新计算结果，起到了缓存作用
+
+        useMemo和useCallback的区别：
+        useMemo计算结果是return回来的值，通常用于缓存计算结果的值
+        useCallback计算结果是一个函数，通常用于缓存函数
+
 
 36.class和hooks比较
     hook：只能在最顶层使用hook

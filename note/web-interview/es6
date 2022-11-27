@@ -31,7 +31,7 @@
 6、Promise
     JavaScript的异步解决方案，为异步操作提供统一接口
     实例方法：then catch  finally
-    构造方法： all race resolve  reject
+    构造方法： all race resolve  reject allSettled
 
 7、模块
     代码抽象 代码封装 代码复用 依赖管理
